@@ -2,6 +2,8 @@
 
 This is a small module (Android library only) that allows to download and manage an [aria2](https://github.com/aria2/aria2) executable. It is used in [Aria2Android](https://github.com/devgianlu/Aria2Android) and [Aria2App](https://github.com/devgianlu/Aria2App).
 
+> This also depends on [CommonUtils](https://github.com/devgianlu/CommonUtils). You can find how to include it there, but it is pretty similar to what comes below.
+
 ## How to
 
 - Add as Git submodule in your project (`git submodule add https://github.com/devgianlu/aria2lib`)
