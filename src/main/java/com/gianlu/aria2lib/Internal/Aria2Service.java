@@ -51,6 +51,7 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     private NotificationManager notificationManager;
     private long startTime = System.currentTimeMillis();
     private BareConfigProvider provider;
+    private String aria2Version;
 
     public static void startService(@NonNull Context context) {
         ContextCompat.startForegroundService(context, new Intent(context, Aria2Service.class)
@@ -94,6 +95,13 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
                 .setSmallIcon(provider.notificationIcon())
                 .setContentIntent(PendingIntent.getActivity(this, 2, new Intent(this, provider.actionClass()), PendingIntent.FLAG_UPDATE_CURRENT))
                 .setContentText("aria2c is running...");
+
+        try {
+            aria2Version = aria2.version();
+        } catch (BadEnvironmentException | IOException ex) {
+            Logging.log(ex);
+            aria2Version = "aria2 version [unknown]";
+        }
     }
 
     @Nullable
@@ -184,6 +192,9 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
         intent.putExtra("i", msg.integer());
         if (msg.object() instanceof Serializable) intent.putExtra("o", (Serializable) msg.object());
         broadcastManager.sendBroadcast(intent);
+
+        if (msg.type() != com.gianlu.aria2lib.Internal.Message.Type.MONITOR_UPDATE)
+            Logging.log(msg.toLogLine(aria2Version));
     }
 
     private void dispatchStatus() {

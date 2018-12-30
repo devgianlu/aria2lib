@@ -1,5 +1,7 @@
 package com.gianlu.aria2lib.Internal;
 
+import com.gianlu.commonutils.Logging;
+
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -69,8 +71,35 @@ public final class Message {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Message{o=" + o + ", i=" + i + ", type=" + type + '}';
+    }
+
+    @NonNull
+    public Logging.LogLine toLogLine(@NonNull String aria2Version) {
+        return new Logging.LogLine(System.currentTimeMillis(), aria2Version, type.getType(), toString());
+    }
+
     public enum Type {
         PROCESS_TERMINATED, PROCESS_STARTED, MONITOR_FAILED, MONITOR_UPDATE,
-        PROCESS_WARN, PROCESS_ERROR, PROCESS_INFO
+        PROCESS_WARN, PROCESS_ERROR, PROCESS_INFO;
+
+        @NonNull
+        private Logging.LogLine.Type getType() {
+            switch (this) {
+                case MONITOR_UPDATE:
+                case PROCESS_INFO:
+                case PROCESS_STARTED:
+                case PROCESS_TERMINATED:
+                    return Logging.LogLine.Type.INFO;
+                case PROCESS_WARN:
+                    return Logging.LogLine.Type.WARNING;
+                default:
+                case PROCESS_ERROR:
+                case MONITOR_FAILED:
+                    return Logging.LogLine.Type.ERROR;
+            }
+        }
     }
 }
