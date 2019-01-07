@@ -262,8 +262,10 @@ public final class Aria2 {
             this.session = session;
             this.params = new HashMap<>();
 
+            // Can be overridden
+            params.put("check-certificate", "false");
             if (Prefs.getBoolean(Aria2PK.SAVE_SESSION))
-                params.put("--save-session-interval", "30"); // Can be overridden
+                params.put("--save-session-interval", "30");
 
             loadCustomOptions(params);
 
