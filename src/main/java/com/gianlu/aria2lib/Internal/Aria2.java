@@ -87,7 +87,9 @@ public final class Aria2 {
         String[] cmdline = new String[params.length + 1];
         cmdline[0] = env.execPath();
         System.arraycopy(params, 0, cmdline, 1, params.length);
-        return new ProcessBuilder(cmdline).redirectErrorStream(redirect).start();
+        Process process = new ProcessBuilder(cmdline).redirectErrorStream(redirect).start();
+        if (process == null) throw new IOException("Process is null!");
+        return process;
     }
 
     public void loadEnv(@NonNull File env, @NonNull File session) throws BadEnvironmentException {
