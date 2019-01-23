@@ -40,6 +40,7 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     public static final String BROADCAST_MESSAGE = Aria2Service.class.getCanonicalName() + ".BROADCAST_MESSAGE";
     public static final String BROADCAST_STATUS = Aria2Service.class.getCanonicalName() + ".BROADCAST_STATUS";
     public static final int MESSAGE_STATUS = 2;
+    public static final int MESSAGE_STOP = 3;
     private static final String CHANNEL_ID = "aria2service";
     private static final String SERVICE_NAME = "Service for aria2";
     private static final int NOTIFICATION_ID = 4;
@@ -218,6 +219,10 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
             switch (msg.what) {
                 case MESSAGE_STATUS:
                     service.dispatchStatus();
+                    break;
+                case MESSAGE_STOP:
+                    service.stop();
+                    service.stopSelf();
                     break;
                 default:
                     super.handleMessage(msg);

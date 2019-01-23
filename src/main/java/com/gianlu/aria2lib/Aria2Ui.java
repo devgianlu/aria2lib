@@ -112,6 +112,15 @@ public class Aria2Ui {
     }
 
     public void stopService() {
+        if (messenger != null) {
+            try {
+                messenger.send(android.os.Message.obtain(null, Aria2Service.MESSAGE_STOP));
+                return;
+            } catch (RemoteException ex) {
+                Logging.log(ex);
+            }
+        }
+
         Aria2Service.stopService(context);
     }
 
