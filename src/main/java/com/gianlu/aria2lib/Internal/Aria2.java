@@ -33,6 +33,7 @@ public final class Aria2 {
     private static final Pattern INFO_MESSAGE_PATTERN = Pattern.compile("^\\d{2}/\\d{2} \\d{2}:\\d{2}:\\d{2} \\[.+] (.+)$");
     private static Aria2 instance;
     private final MessageHandler messageHandler;
+    private final Object processLock = new Object();
     private Env env;
     private Monitor monitor;
     private StreamWatcher errorWatcher;
@@ -132,10 +133,12 @@ public final class Aria2 {
         String execPath = env.execPath();
         String[] params = env.startArgs();
 
-        currentProcess = execWithParams(true, params);
-        new Thread(new Waiter(currentProcess), "aria2android-waiterThread").start();
-        new Thread(this.inputWatcher = new StreamWatcher(currentProcess.getInputStream()), "aria2-android-inputWatcherThread").start();
-        new Thread(this.errorWatcher = new StreamWatcher(currentProcess.getErrorStream()), "aria2-android-errorWatcherThread").start();
+        synchronized (processLock) {
+            currentProcess = execWithParams(true, params);
+            new Thread(new Waiter(currentProcess), "aria2android-waiterThread").start();
+            new Thread(this.inputWatcher = new StreamWatcher(currentProcess.getInputStream()), "aria2-android-inputWatcherThread").start();
+            new Thread(this.errorWatcher = new StreamWatcher(currentProcess.getErrorStream()), "aria2-android-errorWatcherThread").start();
+        }
 
         if (Prefs.getBoolean(Aria2PK.SHOW_PERFORMANCE))
             new Thread(this.monitor = new Monitor(), "aria2android-monitorThread").start();
@@ -206,9 +209,11 @@ public final class Aria2 {
     }
 
     void stop() {
-        if (currentProcess != null) {
-            currentProcess.destroy();
-            currentProcess = null;
+        synchronized (processLock) {
+            if (currentProcess != null) {
+                currentProcess.destroy();
+                currentProcess = null;
+            }
         }
     }
 
@@ -342,7 +347,6 @@ public final class Aria2 {
         @Override
         public void run() {
             try (Scanner scanner = new Scanner(stream)) {
-
                 while (!shouldStop && scanner.hasNextLine()) {
                     String line = scanner.nextLine();
                     if (!line.isEmpty()) handleStreamMessage(line);
