@@ -25,7 +25,7 @@ public final class Message {
     }
 
     @NonNull
-    public static Message obtain(@NonNull Type type, int i, Object o) {
+    public synchronized static Message obtain(@NonNull Type type, int i, Object o) {
         Message msg = cache.isEmpty() ? null : cache.poll();
         if (msg == null) msg = new Message();
         msg.recycled = false;
