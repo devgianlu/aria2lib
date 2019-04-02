@@ -53,6 +53,8 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     private long startTime = System.currentTimeMillis();
     private BareConfigProvider provider;
     private String aria2Version;
+    private volatile boolean calledStartForeground = false;
+    private volatile boolean stopping = false;
 
     public static void startService(@NonNull Context context) {
         ContextCompat.startForegroundService(context, new Intent(context, Aria2Service.class)
@@ -148,8 +150,12 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     }
 
     private void stop() {
-        aria2.stop();
-        stopForeground(true);
+        stopping = true;
+
+        if (calledStartForeground) {
+            aria2.stop();
+            stopForeground(true);
+        }
     }
 
     private void start() throws IOException, BadEnvironmentException {
@@ -157,7 +163,13 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
             startTime = System.currentTimeMillis();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) createChannel();
-        startForeground(NOTIFICATION_ID, defaultNotification.build());
+
+        if (stopping) {
+            stopSelf();
+        } else {
+            startForeground(NOTIFICATION_ID, defaultNotification.build());
+            calledStartForeground = true;
+        }
     }
 
     @Override
