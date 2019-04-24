@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="publishedAt"><![CDATA[<b>Published at:</b>]]> %s</string>
+    <string name="size"><![CDATA[<b>Size:</b>]]> %s</string>
+</resources>

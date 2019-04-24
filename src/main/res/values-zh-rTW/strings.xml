@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="publishedAt"><b>發佈於:</b>%s</string>
+    <string name="size"><b>大小:</b>%s</string>
+</resources>
