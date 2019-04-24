@@ -2,4 +2,19 @@
 <resources>
     <string name="publishedAt"><![CDATA[<b>Published at:</b>]]> %s</string>
     <string name="size"><![CDATA[<b>Size:</b>]]> %s</string>
+    <string name="failedImportingBin">Failed importing the bin file!</string>
+    <string name="importBin">Import bin</string>
+    <string name="customBin_message">You can import your own aria2 compiled binary. The binary must be compiled for your device architecture and the application behaviour is not guaranteed. The file will be copied, to update you\'ll need to repeat this procedure. Do you really want to import your own bin file?</string>
+    <string name="readPermission">Read permission requested</string>
+    <string name="readStorage_message">The application needs the read permission in order to import the bin file.</string>
+    <string name="readPermissionDenied">You denied the read permission!</string>
+    <string name="customBin">Custom bin file</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="retrievingReleases">Retrieving releases. Please wait…</string>
+    <string name="failedRetrievingReleases_reason">Failed retrieving releases: %s</string>
+    <string name="downloadingBin">Downloading the bin files…</string>
+    <string name="binExtracted">Bin extracted successfully!</string>
+    <string name="extractingBin">Extracting the bin files…</string>
+    <string name="downloadBin">Download bin</string>
 </resources>

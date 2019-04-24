@@ -10,5 +10,7 @@
         <service
             android:name=".Internal.Aria2Service"
             android:enabled="true" />
+
+        <activity android:name=".Interface.DownloadBinActivity" />
     </application>
 </manifest>
