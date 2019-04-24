@@ -16,6 +16,12 @@ import android.os.Message;
 import android.os.Messenger;
 import android.widget.RemoteViews;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.gianlu.aria2lib.Aria2PK;
 import com.gianlu.aria2lib.BadEnvironmentException;
 import com.gianlu.aria2lib.BareConfigProvider;
@@ -27,12 +33,6 @@ import com.gianlu.commonutils.Preferences.Prefs;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Objects;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public final class Aria2Service extends Service implements Aria2.MessageListener {
     public static final String ACTION_START_SERVICE = Aria2Service.class.getCanonicalName() + ".START";
@@ -156,6 +156,8 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
             aria2.stop();
             stopForeground(true);
         }
+
+        dispatchStatus();
     }
 
     private void start() throws IOException, BadEnvironmentException {
@@ -170,6 +172,8 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
             startForeground(NOTIFICATION_ID, defaultNotification.build());
             calledStartForeground = true;
         }
+
+        dispatchStatus();
     }
 
     @Override
