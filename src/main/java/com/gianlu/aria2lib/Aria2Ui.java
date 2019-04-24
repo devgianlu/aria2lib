@@ -10,6 +10,10 @@ import android.os.IBinder;
 import android.os.Messenger;
 import android.os.RemoteException;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.gianlu.aria2lib.Internal.Aria2;
 import com.gianlu.aria2lib.Internal.Aria2Service;
 import com.gianlu.aria2lib.Internal.Message;
@@ -20,10 +24,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Objects;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class Aria2Ui {
     private final Aria2 aria2;
@@ -63,19 +63,22 @@ public class Aria2Ui {
         Prefs.putString(Aria2PK.BARE_CONFIG_PROVIDER, providerClass.getCanonicalName());
     }
 
-    private void bind() {
+    public void bind() {
+        if (messenger != null) return;
+
         context.bindService(new Intent(context, Aria2Service.class), serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
-    public void onStart() {
-        bind();
+    public void unbind() {
+        if (messenger == null) return;
+
+        try {
+            context.unbindService(serviceConnection);
+        } catch (IllegalArgumentException ignored) {
+        }
     }
 
-    public void onResume() {
-        askForStatus();
-    }
-
-    private void askForStatus() {
+    public void askForStatus() {
         try {
             if (messenger != null)
                 messenger.send(android.os.Message.obtain(null, Aria2Service.MESSAGE_STATUS));
@@ -84,17 +87,16 @@ public class Aria2Ui {
         }
     }
 
-    public void onDestroy() {
-        try {
-            context.unbindService(serviceConnection);
-        } catch (IllegalArgumentException ignored) {
-        }
-    }
-
     public void loadEnv() throws BadEnvironmentException {
         String envPath = Prefs.getString(Aria2PK.ENV_LOCATION, null);
-        if (envPath == null) throw new BadEnvironmentException("Environment path not set!");
-        aria2.loadEnv(new File(envPath), new File(context.getFilesDir(), "session"));
+        if (envPath == null || envPath.isEmpty())
+            throw new BadEnvironmentException("Environment path not set!");
+
+        File file = new File(envPath);
+        if (!file.exists())
+            throw new BadEnvironmentException("Environment path is invalid!");
+
+        aria2.loadEnv(file, new File(context.getFilesDir(), "session"));
     }
 
     @NonNull
