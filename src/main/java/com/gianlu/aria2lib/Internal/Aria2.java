@@ -1,5 +1,7 @@
 package com.gianlu.aria2lib.Internal;
 
+import androidx.annotation.NonNull;
+
 import com.gianlu.aria2lib.Aria2PK;
 import com.gianlu.aria2lib.BadEnvironmentException;
 import com.gianlu.commonutils.Logging;
@@ -25,8 +27,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import androidx.annotation.NonNull;
 
 public final class Aria2 {
     private static final Pattern TOP_PATTERN = Pattern.compile("(\\d*?)\\s+(\\d*?)\\s+(\\d*?)%\\s(.)\\s+(\\d*?)\\s+(\\d*?)K\\s+(\\d*?)K\\s+(..)\\s(.*?)\\s+(.*)$");
@@ -64,6 +64,10 @@ public final class Aria2 {
 
     void removeListener(@NonNull MessageListener listener) {
         messageHandler.listeners.remove(listener);
+    }
+
+    public boolean hasEnv() {
+        return env != null;
     }
 
     @NonNull

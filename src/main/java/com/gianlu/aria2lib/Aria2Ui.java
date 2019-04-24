@@ -130,6 +130,10 @@ public class Aria2Ui {
         return aria2.delete();
     }
 
+    public boolean hasEnv() {
+        return aria2.hasEnv();
+    }
+
     public interface Listener {
         void onMessage(@NonNull Message.Type type, int i, @Nullable Serializable o);
 
