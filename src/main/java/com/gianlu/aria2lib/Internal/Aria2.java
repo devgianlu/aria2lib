@@ -367,7 +367,7 @@ public final class Aria2 {
         public void run() {
             Process process = null;
             try {
-                process = Runtime.getRuntime().exec("top -d " + String.valueOf(Prefs.getInt(Aria2PK.NOTIFICATION_UPDATE_DELAY, 1)));
+                process = Runtime.getRuntime().exec("top -d " + Prefs.getInt(Aria2PK.NOTIFICATION_UPDATE_DELAY, 1));
                 try (Scanner scanner = new Scanner(process.getInputStream())) {
                     while (!shouldStop && scanner.hasNextLine()) {
                         String line = scanner.nextLine();
