@@ -96,6 +96,8 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
                 .setAutoCancel(false)
                 .setOngoing(true)
                 .setSmallIcon(provider.notificationIcon())
+                .addAction(0, "Stop service", PendingIntent.getService(this, 1, new Intent(this, Aria2Service.class)
+                        .setAction(ACTION_STOP_SERVICE), PendingIntent.FLAG_UPDATE_CURRENT))
                 .setContentIntent(PendingIntent.getActivity(this, 2, new Intent(this, provider.actionClass()), PendingIntent.FLAG_UPDATE_CURRENT))
                 .setContentText("aria2c is running...");
 
