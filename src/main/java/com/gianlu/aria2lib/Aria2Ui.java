@@ -37,18 +37,12 @@ public class Aria2Ui {
         public void onServiceConnected(ComponentName name, IBinder service) {
             messenger = new Messenger(service);
 
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(Aria2Service.BROADCAST_MESSAGE);
-            filter.addAction(Aria2Service.BROADCAST_STATUS);
-            broadcastManager.registerReceiver(receiver = new ServiceBroadcastReceiver(), filter);
-
             askForStatus();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
             messenger = null;
-            if (receiver != null) broadcastManager.unregisterReceiver(receiver);
         }
     };
 
@@ -57,6 +51,11 @@ public class Aria2Ui {
         this.listener = listener;
         this.aria2 = Aria2.get();
         this.broadcastManager = LocalBroadcastManager.getInstance(context);
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Aria2Service.BROADCAST_MESSAGE);
+        filter.addAction(Aria2Service.BROADCAST_STATUS);
+        broadcastManager.registerReceiver(receiver = new ServiceBroadcastReceiver(), filter);
     }
 
     public static void provider(@NonNull Class<? extends BareConfigProvider> providerClass) {
@@ -67,6 +66,11 @@ public class Aria2Ui {
         if (messenger != null) return;
 
         context.bindService(new Intent(context, Aria2Service.class), serviceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void finalize() {
+        if (receiver != null) broadcastManager.unregisterReceiver(receiver);
     }
 
     public void unbind() {
