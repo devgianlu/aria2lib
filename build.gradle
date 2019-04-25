@@ -38,7 +38,11 @@ dependencies {
     api(project(':CommonUtils')) {
         transitive = false
     }
-    api 'androidx.annotation:annotation:1.0.1'
+
+    api project(':MaterialPreferences')
+    api project(':LovelyMaterialPreferences')
+
+    api 'androidx.annotation:annotation:1.0.2'
     api 'androidx.core:core:1.0.1'
     api 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
 

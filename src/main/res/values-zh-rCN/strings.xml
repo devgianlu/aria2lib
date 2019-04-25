@@ -17,4 +17,25 @@
     <string name="downloadingBin">正在下载二进制文件…</string>
     <string name="binExtracted">二进制文件提取成功!</string>
     <string name="extractingBin">正在提取二进制文件…</string>
+    <string name="startServiceAtBoot">系统启动时启动服务</string>
+    <string name="startServiceAtBoot_summary">设备开启时服务将被打开。</string>
+    <string name="notification">通知</string>
+    <string name="showPerformance">显示性能</string>
+    <string name="showPerformance_summary">在服务运行时持续显示通知。</string>
+    <string name="invalidOutputPath">输出路径不存在或无法写入!</string>
+    <string name="invalidPort">端口无效!</string>
+    <string name="invalidToken">Token无效!</string>
+    <string name="general">通用</string>
+    <string name="accessControlAllowOriginAll">Access Control Allow Origin all</string>
+    <string name="accessControlAllowOriginAll_summary">设置 <b>Access-Control-Allow-Origin</b> 头为 <b>*</b>。请仅当你在使用外部设备连接时启用该项。</string>
+    <string name="noOpenTree">找不到处理此操作的应用程序。请手动输入路径。</string>
+    <string name="rpcPort">RPC端口</string>
+    <string name="rpcToken">RPC token</string>
+    <string name="updateInterval">更新间隔（秒）</string>
+    <string name="outputPath">输出路径</string>
+    <string name="outputPath_summary">你的下载将输出到那.</string>
+    <string name="clearLogs">清除日志</string>
+    <string name="customOptions">自定义选项</string>
+    <string name="saveSession">保存会话</string>
+    <string name="saveSession_summary">定期保存下载，以便在服务停止时不会丢失它们。</string>
 </resources>

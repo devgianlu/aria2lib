@@ -17,4 +17,26 @@
     <string name="binExtracted">Bin extracted successfully!</string>
     <string name="extractingBin">Extracting the bin files…</string>
     <string name="downloadBin">Download bin</string>
+    <string name="rpcPort">RPC port</string>
+    <string name="rpcToken">RPC token</string>
+    <string name="outputPath">Output path</string>
+    <string name="outputPath_summary">Your downloads will end up there.</string>
+    <string name="general">General</string>
+    <string name="clearLogs">Clear logs</string>
+    <string name="saveSession">Save session</string>
+    <string name="saveSession_summary">Save the downloads periodically so that you don\'t lose them when the service is stopped.</string>
+    <string name="startServiceAtBoot">Start service when the system boots</string>
+    <string name="startServiceAtBoot_summary">The service will start when the device turns on.</string>
+    <string name="customOptions">Custom options</string>
+    <string name="accessControlAllowOriginAll">Access Control Allow Origin all</string>
+    <string name="accessControlAllowOriginAll_summary">Set <b>Access-Control-Allow-Origin</b> header to <b>*</b>. You should enable this only if you\'re trying to connect from an external device.</string>
+    <string name="notification">Notification</string>
+    <string name="showPerformance">Show performance</string>
+    <string name="showPerformance_summary">Show a persistent notification when the service is running.</string>
+    <string name="updateInterval">Update interval (sec)</string>
+    <string name="rpc" translatable="false">RPC</string>
+    <string name="noOpenTree">No application found to handle this operation. Please enter the path manually.</string>
+    <string name="invalidPort">The port is invalid!</string>
+    <string name="invalidToken">The token is invalid!</string>
+    <string name="invalidOutputPath">The output path is either missing or not writable!</string>
 </resources>
