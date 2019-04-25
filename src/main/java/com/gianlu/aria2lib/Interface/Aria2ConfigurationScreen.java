@@ -82,6 +82,7 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
         // General
         generalCategory = new MaterialPreferenceCategory(getContext());
         generalCategory.setTitle(R.string.general);
+        generalCategory.setTitleColorRes(R.color.colorAccent);
         addView(generalCategory);
 
         outputPath = new MaterialEditTextPreference.Builder(getContext())
@@ -121,6 +122,7 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
         // RPC
         if (rpcEnabled) {
             rpcCategory = new MaterialPreferenceCategory(getContext());
+            rpcCategory.setTitleColorRes(R.color.colorAccent);
             rpcCategory.setTitle(R.string.rpc);
             addView(rpcCategory);
 
@@ -152,6 +154,7 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
         // Notifications
         notificationsCategory = new MaterialPreferenceCategory(getContext());
         notificationsCategory.setTitle(R.string.notification);
+        notificationsCategory.setTitleColorRes(R.color.colorAccent);
         addView(notificationsCategory);
 
         MaterialCheckboxPreference showPerformance = new MaterialCheckboxPreference.Builder(getContext())
@@ -174,6 +177,7 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
 
         // Logs
         MaterialPreferenceCategory logsCategory = new MaterialPreferenceCategory(getContext());
+        logsCategory.setTitleColorRes(R.color.colorAccent);
         logsCategory.setTitle(R.string.logs);
         addView(logsCategory);
 

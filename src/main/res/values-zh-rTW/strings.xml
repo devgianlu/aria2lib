@@ -38,4 +38,6 @@
     <string name="showPerformance">顯示效能</string>
     <string name="showPerformance_summary">在服務運行時持續顯示通知。</string>
     <string name="customOptions">自訂設定</string>
+    <string name="logTerminated">Terminated with exit code %d.</string>
+    <string name="logStarted">Started: %s</string>
 </resources>

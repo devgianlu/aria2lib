@@ -38,4 +38,6 @@
     <string name="customOptions">自定义选项</string>
     <string name="saveSession">保存会话</string>
     <string name="saveSession_summary">定期保存下载，以便在服务停止时不会丢失它们。</string>
+    <string name="logTerminated">以退出代码终止 %d.</string>
+    <string name="logStarted">开始: %s</string>
 </resources>
