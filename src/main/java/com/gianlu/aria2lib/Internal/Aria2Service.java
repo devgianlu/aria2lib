@@ -53,8 +53,6 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     private long startTime = System.currentTimeMillis();
     private BareConfigProvider provider;
     private String aria2Version;
-    private volatile boolean calledStartForeground = false;
-    private volatile boolean stopping = false;
 
     public static void startService(@NonNull Context context) {
         ContextCompat.startForegroundService(context, new Intent(context, Aria2Service.class)
@@ -79,6 +77,12 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
         }
     }
 
+    @NonNull
+    private PendingIntent getStopServiceIntent() {
+        return PendingIntent.getService(this, 1, new Intent(this, Aria2Service.class)
+                .setAction(ACTION_STOP_SERVICE), PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -96,11 +100,12 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
                 .setAutoCancel(false)
                 .setOngoing(true)
                 .setSmallIcon(provider.notificationIcon())
-                .addAction(0, "Stop service", PendingIntent.getService(this, 1, new Intent(this, Aria2Service.class)
-                        .setAction(ACTION_STOP_SERVICE), PendingIntent.FLAG_UPDATE_CURRENT))
                 .setContentIntent(PendingIntent.getActivity(this, 2, new Intent(this, provider.actionClass())
                         .putExtra("openFromNotification", true), PendingIntent.FLAG_UPDATE_CURRENT))
                 .setContentText("aria2c is running...");
+
+        if (!Prefs.getBoolean(Aria2PK.SHOW_PERFORMANCE))
+            defaultNotification.addAction(0, getString(R.string.stopService), getStopServiceIntent());
 
         try {
             aria2Version = aria2.version();
@@ -153,13 +158,8 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     }
 
     private void stop() {
-        stopping = true;
-
-        if (calledStartForeground) {
-            aria2.stop();
-            stopForeground(true);
-        }
-
+        aria2.stop();
+        stopForeground(true);
         dispatchStatus();
     }
 
@@ -169,13 +169,7 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) createChannel();
 
-        if (stopping) {
-            stopSelf();
-        } else {
-            startForeground(NOTIFICATION_ID, defaultNotification.build());
-            calledStartForeground = true;
-        }
-
+        startForeground(NOTIFICATION_ID, defaultNotification.build());
         dispatchStatus();
     }
 
@@ -183,11 +177,8 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     public void onMessage(@NonNull com.gianlu.aria2lib.Internal.Message msg) {
         dispatch(msg);
 
-        switch (msg.type()) {
-            case MONITOR_UPDATE:
-                updateMonitor((MonitorUpdate) msg.object());
-                break;
-        }
+        if (msg.type() == com.gianlu.aria2lib.Internal.Message.Type.MONITOR_UPDATE)
+            updateMonitor((MonitorUpdate) msg.object());
     }
 
     private void updateMonitor(@Nullable MonitorUpdate update) {
@@ -199,6 +190,8 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
         layout.setTextViewText(R.id.customNotification_cpu, "CPU: " + update.cpu() + "%");
         layout.setTextViewText(R.id.customNotification_memory, "Memory: " + CommonUtils.dimensionFormatter(Integer.parseInt(update.rss()) * 1024, false));
         layout.setImageViewResource(R.id.customNotification_icon, provider.launcherIcon());
+        layout.setImageViewResource(R.id.customNotification_stop, R.drawable.baseline_clear_24);
+        layout.setOnClickPendingIntent(R.id.customNotification_stop, getStopServiceIntent());
         defaultNotification.setCustomContentView(layout);
 
         notificationManager.notify(NOTIFICATION_ID, defaultNotification.build());

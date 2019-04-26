@@ -10,6 +10,7 @@
     <string name="readPermissionDenied">You denied the read permission!</string>
     <string name="customBin">Custom bin file</string>
     <string name="yes">Yes</string>
+    <string name="stopService">Stop service</string>
     <string name="no">No</string>
     <string name="retrievingReleases">Retrieving releases. Please wait…</string>
     <string name="failedRetrievingReleases_reason">Failed retrieving releases: %s</string>
