@@ -55,8 +55,7 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
         super(context, attrs, defStyleAttr);
     }
 
-    public void setup(@NonNull AbsMaterialPreference.OverrideOnClickListener outputPathListener, @Nullable Prefs.KeyWithDefault<Boolean> startAtBootPref,
-                      @Nullable Class<? extends Activity> configEditorClass, boolean rpcEnabled) {
+    public void setup(@NonNull AbsMaterialPreference.OverrideOnClickListener outputPathListener, @Nullable Prefs.KeyWithDefault<Boolean> startAtBootPref, boolean rpcEnabled) {
         MaterialPreferences.instance().setUserInputModule(new LovelyInput.Builder()
                 .addIcon(Aria2PK.OUTPUT_DIRECTORY.key(), R.drawable.baseline_folder_24)
                 .addTextFilter(Aria2PK.OUTPUT_DIRECTORY.key(), R.string.invalidOutputPath, text -> {
@@ -112,12 +111,10 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
             generalCategory.addView(startAtBoot);
         }
 
-        if (configEditorClass != null) {
-            MaterialStandardPreference customOptions = new MaterialStandardPreference(getContext());
-            customOptions.setOnClickListener(v -> getContext().startActivity(new Intent(getContext(), configEditorClass)));
-            customOptions.setTitle(R.string.customOptions);
-            generalCategory.addView(customOptions);
-        }
+        MaterialStandardPreference customOptions = new MaterialStandardPreference(getContext());
+        customOptions.setOnClickListener(v -> getContext().startActivity(new Intent(getContext(), ConfigEditorActivity.class)));
+        customOptions.setTitle(R.string.customOptions);
+        generalCategory.addView(customOptions);
 
         // RPC
         if (rpcEnabled) {

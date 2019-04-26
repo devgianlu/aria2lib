@@ -11,6 +11,10 @@
             android:name=".Internal.Aria2Service"
             android:enabled="true" />
 
+        <!-- Download aria2 binary activity -->
         <activity android:name=".Interface.DownloadBinActivity" />
+
+        <!-- Custom options editor activity -->
+        <activity android:name="com.gianlu.aria2lib.Interface.ConfigEditorActivity" />
     </application>
 </manifest>

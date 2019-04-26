@@ -75,7 +75,7 @@ public class DownloadBinActivity extends ActivityWithDialog implements ReleasesA
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.download_bin, menu);
+        getMenuInflater().inflate(R.menu.aria2lib_download_bin, menu);
         return true;
     }
 

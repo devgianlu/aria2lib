@@ -63,7 +63,7 @@ public class ReleasesAdapter extends RecyclerView.Adapter<ReleasesAdapter.ViewHo
         final SuperTextView size;
 
         ViewHolder(@NonNull ViewGroup parent) {
-            super(inflater.inflate(R.layout.release_item, parent, false));
+            super(inflater.inflate(R.layout.aria2lib_item_release, parent, false));
 
             name = itemView.findViewById(R.id.releaseItem_name);
             uploadedAt = itemView.findViewById(R.id.releaseItem_publishedAt);

@@ -41,4 +41,22 @@
     <string name="invalidOutputPath">The output path is either missing or not writable!</string>
     <string name="logTerminated">Terminated with exit code %d.</string>
     <string name="logStarted">Started: %s</string>
+    <string name="add">Add</string>
+    <string name="newValue">New value:</string>
+    <string name="apply">Apply</string>
+    <string name="currentValue"><![CDATA[<b>Current value:</b>]]> %s</string>
+    <string name="key">Key:</string>
+    <string name="value">Value:</string>
+    <string name="newOption">New option</string>
+    <string name="unsavedChanges">There are unsaved changes</string>
+    <string name="unsavedChanges_message">Some changes you made to the configuration file may have not been saved. Do you wan\'t to save them before exiting?</string>
+    <string name="importConfig">Import config</string>
+    <string name="fileNotFound">The selected file couldn\'t be found!</string>
+    <string name="cannotImport">Cannot import the selected file!</string>
+    <string name="noCustomOptions">You have no custom options.</string>
+    <string name="done">Done</string>
+    <string name="failedSavingCustomOptions">Failed saving custom options!</string>
+    <string name="updatedApp_importedConfig">Imported config file</string>
+    <string name="updatedApp_importedConfig_message">This version of the app introduced a new feature: the custom options editor. Your config file has been imported here.</string>
+    <string name="failedLoadingOptions">Failed loading custom options!</string>
 </resources>

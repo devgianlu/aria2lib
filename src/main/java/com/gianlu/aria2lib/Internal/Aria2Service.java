@@ -192,7 +192,7 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     private void updateMonitor(@Nullable MonitorUpdate update) {
         if (update == null || notificationManager == null) return;
 
-        RemoteViews layout = new RemoteViews(getPackageName(), R.layout.custom_notification);
+        RemoteViews layout = new RemoteViews(getPackageName(), R.layout.aria2lib_custom_notification);
         layout.setTextViewText(R.id.customNotification_runningTime, "Running time: " + CommonUtils.timeFormatter((System.currentTimeMillis() - startTime) / 1000));
         layout.setTextViewText(R.id.customNotification_pid, "PID: " + update.pid());
         layout.setTextViewText(R.id.customNotification_cpu, "CPU: " + update.cpu() + "%");
