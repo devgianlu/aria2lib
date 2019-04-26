@@ -163,11 +163,11 @@ public class ConfigEditorActivity extends ActivityWithDialog implements SimpleOp
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.unsavedChanges)
                         .setMessage(R.string.unsavedChanges_message)
-                        .setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
+                        .setPositiveButton(R.string.yes, (dialogInterface, i) -> {
                             save();
                             onBackPressed();
                         })
-                        .setNegativeButton(android.R.string.no, (dialogInterface, i) -> onBackPressed())
+                        .setNegativeButton(R.string.no, (dialogInterface, i) -> onBackPressed())
                         .setNeutralButton(android.R.string.cancel, null);
 
                 showDialog(builder);
