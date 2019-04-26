@@ -32,6 +32,10 @@ android {
             dimension 'main'
         }
     }
+
+    lintOptions {
+        warning 'MissingTranslation'
+    }
 }
 
 dependencies {
