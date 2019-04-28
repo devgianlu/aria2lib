@@ -24,7 +24,7 @@
     <string name="outputPath_summary">您下载的文件将会放置到此处。</string>
     <string name="general">通用</string>
     <string name="clearLogs">清除日志</string>
-    <string name="saveSession">保存</string>
+    <string name="saveSession">保存会话</string>
     <string name="saveSession_summary">定期保存下载任务信息，以便在服务停止时不会丢失它们。</string>
     <string name="startServiceAtBoot">随系统启动开始服务</string>
     <string name="startServiceAtBoot_summary">设备启动后服务自动开始。</string>
