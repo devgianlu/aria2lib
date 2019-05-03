@@ -103,6 +103,9 @@ public class ConfigEditorActivity extends ActivityWithDialog implements SimpleOp
     private void importOptionsFromStream(@NonNull InputStream in) {
         StringBuilder builder = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+            if (builder.length() > 1024 * 1024 * 10)
+                throw new IOException("File is too big!");
+
             String line;
             while ((line = reader.readLine()) != null) builder.append(line).append('\n');
         } catch (IOException | OutOfMemoryError ex) {
