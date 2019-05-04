@@ -17,11 +17,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 
 import com.gianlu.aria2lib.Aria2PK;
 import com.gianlu.aria2lib.R;
+import com.gianlu.commonutils.CasualViews.RecyclerViewLayout;
+import com.gianlu.commonutils.CasualViews.SuperTextView;
 import com.gianlu.commonutils.Dialogs.ActivityWithDialog;
 import com.gianlu.commonutils.NameValuePair;
 import com.gianlu.commonutils.Preferences.Json.JsonStoring;
-import com.gianlu.commonutils.RecyclerViewLayout;
-import com.gianlu.commonutils.SuperTextView;
 import com.gianlu.commonutils.Toaster;
 
 import org.json.JSONException;

@@ -17,8 +17,8 @@ import androidx.core.content.ContextCompat;
 
 import com.gianlu.aria2lib.Aria2PK;
 import com.gianlu.aria2lib.R;
+import com.gianlu.commonutils.CasualViews.MessageView;
 import com.gianlu.commonutils.Logging;
-import com.gianlu.commonutils.MessageView;
 import com.gianlu.commonutils.Preferences.Prefs;
 import com.gianlu.commonutils.Toaster;
 import com.yarolegovich.lovelyuserinput.LovelyInput;

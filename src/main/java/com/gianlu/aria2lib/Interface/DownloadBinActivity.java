@@ -20,10 +20,10 @@ import com.gianlu.aria2lib.GitHubApi;
 import com.gianlu.aria2lib.R;
 import com.gianlu.commonutils.Analytics.AnalyticsApplication;
 import com.gianlu.commonutils.AskPermission;
+import com.gianlu.commonutils.CasualViews.RecyclerViewLayout;
 import com.gianlu.commonutils.Dialogs.ActivityWithDialog;
 import com.gianlu.commonutils.Logging;
 import com.gianlu.commonutils.Preferences.Prefs;
-import com.gianlu.commonutils.RecyclerViewLayout;
 import com.gianlu.commonutils.Toaster;
 
 import java.io.File;
