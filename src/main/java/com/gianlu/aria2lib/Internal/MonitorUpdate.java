@@ -1,10 +1,10 @@
 package com.gianlu.aria2lib.Internal;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Queue;
-
-import androidx.annotation.NonNull;
 
 public final class MonitorUpdate implements Serializable {
     private static final Queue<MonitorUpdate> cache = new LinkedList<>();
@@ -15,15 +15,15 @@ public final class MonitorUpdate implements Serializable {
     }
 
     private boolean recycled = false;
-    private String rss;
+    private int rss;
     private String cpu;
-    private String pid;
+    private int pid;
 
     private MonitorUpdate() {
     }
 
     @NonNull
-    public static MonitorUpdate obtain(@NonNull String pid, @NonNull String cpu, @NonNull String rss) {
+    public static MonitorUpdate obtain(int pid, @NonNull String cpu, int rss) {
         MonitorUpdate msg = cache.poll();
         if (msg == null) msg = new MonitorUpdate();
         msg.recycled = false;
@@ -41,7 +41,7 @@ public final class MonitorUpdate implements Serializable {
     }
 
     @NonNull
-    public String pid() {
+    public int pid() {
         return pid;
     }
 
@@ -51,7 +51,7 @@ public final class MonitorUpdate implements Serializable {
     }
 
     @NonNull
-    public String rss() {
+    public int rss() {
         return rss;
     }
 }

@@ -14,6 +14,7 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
@@ -83,17 +84,7 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
                 .setAction(ACTION_STOP_SERVICE), PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        aria2 = Aria2.get();
-        aria2.addListener(this);
-        serviceThread.start();
-        broadcastManager = LocalBroadcastManager.getInstance(this);
-        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        provider = loadProvider();
-
+    private void initializeNotification() {
         defaultNotification = new NotificationCompat.Builder(getBaseContext(), CHANNEL_ID)
                 .setContentTitle(SERVICE_NAME)
                 .setShowWhen(false)
@@ -105,7 +96,26 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
                 .setContentText("aria2c is running...");
 
         if (!Prefs.getBoolean(Aria2PK.SHOW_PERFORMANCE))
-            defaultNotification.addAction(0, getString(R.string.stopService), getStopServiceIntent());
+            defaultNotification.addAction(R.drawable.baseline_clear_24, getString(R.string.stopService), getStopServiceIntent());
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        aria2 = Aria2.get();
+        aria2.addListener(this);
+        serviceThread.start();
+        broadcastManager = LocalBroadcastManager.getInstance(this);
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        provider = loadProvider();
+
+        initializeNotification();
+
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
+            if (key.equals(Aria2PK.SHOW_PERFORMANCE.key()))
+                initializeNotification();
+        });
 
         try {
             aria2Version = aria2.version();
@@ -188,7 +198,7 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
         layout.setTextViewText(R.id.customNotification_runningTime, "Running time: " + CommonUtils.timeFormatter((System.currentTimeMillis() - startTime) / 1000));
         layout.setTextViewText(R.id.customNotification_pid, "PID: " + update.pid());
         layout.setTextViewText(R.id.customNotification_cpu, "CPU: " + update.cpu() + "%");
-        layout.setTextViewText(R.id.customNotification_memory, "Memory: " + CommonUtils.dimensionFormatter(Integer.parseInt(update.rss()) * 1024, false));
+        layout.setTextViewText(R.id.customNotification_memory, "Memory: " + CommonUtils.dimensionFormatter(update.rss(), false));
         layout.setImageViewResource(R.id.customNotification_icon, provider.launcherIcon());
         layout.setImageViewResource(R.id.customNotification_stop, R.drawable.baseline_clear_24);
         layout.setOnClickPendingIntent(R.id.customNotification_stop, getStopServiceIntent());
