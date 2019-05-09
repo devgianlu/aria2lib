@@ -87,6 +87,7 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     private void initializeNotification() {
         defaultNotification = new NotificationCompat.Builder(getBaseContext(), CHANNEL_ID)
                 .setContentTitle(SERVICE_NAME)
+                .setVibrate(new long[0]).setSound(null)
                 .setShowWhen(false)
                 .setAutoCancel(false)
                 .setOngoing(true)
