@@ -110,11 +110,30 @@ public class Aria2Ui {
 
     public void startService() {
         bind();
-        Aria2Service.startService(context);
+
+        try {
+            Aria2Service.startService(context);
+        } catch (SecurityException ex) {
+            if (listener != null) {
+                listener.onMessage(Message.Type.PROCESS_ERROR, 0, ex.getMessage());
+                listener.updateUi(false);
+            }
+
+            Logging.log(ex);
+        }
     }
 
     public void startServiceFromReceiver() {
-        Aria2Service.startService(context);
+        try {
+            Aria2Service.startService(context);
+        } catch (SecurityException ex) {
+            if (listener != null) {
+                listener.onMessage(Message.Type.PROCESS_ERROR, 0, ex.getMessage());
+                listener.updateUi(false);
+            }
+
+            Logging.log(ex);
+        }
     }
 
     public void stopService() {
