@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.gianlu.aria2lib.Aria2PK;
+import com.gianlu.aria2lib.Aria2Ui;
 import com.gianlu.aria2lib.R;
 import com.gianlu.commonutils.CasualViews.MessageView;
 import com.gianlu.commonutils.Logging;
@@ -35,7 +36,7 @@ import com.yarolegovich.mp.io.MaterialPreferences;
 import java.io.File;
 
 public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
-    private static final int MAX_LOG_LINES = 100;
+
     private MaterialPreferenceCategory generalCategory;
     private MaterialEditTextPreference outputPath;
     private MaterialPreferenceCategory rpcCategory;
@@ -221,7 +222,7 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
             logsContainer.setVisibility(View.VISIBLE);
             logsMessage.setVisibility(View.GONE);
             logsContainer.addView(Logging.LogLineAdapter.createLogLineView(LayoutInflater.from(getContext()), logsContainer, line), logsContainer.getChildCount());
-            if (logsContainer.getChildCount() > MAX_LOG_LINES)
+            if (logsContainer.getChildCount() > Aria2Ui.MAX_LOG_LINES)
                 logsContainer.removeViewAt(0);
         }
     }
