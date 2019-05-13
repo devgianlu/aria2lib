@@ -1,12 +1,12 @@
 package com.gianlu.aria2lib.Internal;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.gianlu.commonutils.Logging;
 
 import java.util.LinkedList;
 import java.util.Queue;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 public final class Message {
     private static final Queue<Message> cache = new LinkedList<>();
@@ -25,17 +25,6 @@ public final class Message {
     }
 
     @NonNull
-    public synchronized static Message obtain(@NonNull Type type, int i, Object o) {
-        Message msg = cache.isEmpty() ? null : cache.poll();
-        if (msg == null) msg = new Message();
-        msg.recycled = false;
-        msg.type = type;
-        msg.i = i;
-        msg.o = o;
-        return msg;
-    }
-
-    @NonNull
     public static Message obtain(@NonNull Type type, Object o) {
         return obtain(type, 0, o);
     }
@@ -48,6 +37,19 @@ public final class Message {
     @NonNull
     public static Message obtain(@NonNull Type type) {
         return obtain(type, 0, null);
+    }
+
+    @NonNull
+    public static Message obtain(@NonNull Type type, int i, Object o) {
+        synchronized (cache) {
+            Message msg = cache.isEmpty() ? null : cache.poll();
+            if (msg == null) msg = new Message();
+            msg.recycled = false;
+            msg.type = type;
+            msg.i = i;
+            msg.o = o;
+            return msg;
+        }
     }
 
     @NonNull
@@ -65,9 +67,11 @@ public final class Message {
     }
 
     public void recycle() {
-        if (!recycled) {
-            cache.add(this);
-            recycled = true;
+        synchronized (cache) {
+            if (!recycled) {
+                cache.add(this);
+                recycled = true;
+            }
         }
     }
 
