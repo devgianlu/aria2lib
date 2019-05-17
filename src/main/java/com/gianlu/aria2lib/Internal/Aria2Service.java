@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -53,6 +54,10 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     private NotificationManager notificationManager;
     private long startTime = System.currentTimeMillis();
     private BareConfigProvider provider;
+    private final SharedPreferences.OnSharedPreferenceChangeListener reinitializeNotificationListener = (sharedPreferences, key) -> {
+        if (key.equals(Aria2PK.SHOW_PERFORMANCE.key()))
+            initializeNotification();
+    };
     private String aria2Version;
 
     public static void startService(@NonNull Context context) {
@@ -113,10 +118,7 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
 
         initializeNotification();
 
-        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
-            if (key.equals(Aria2PK.SHOW_PERFORMANCE.key()))
-                initializeNotification();
-        });
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(reinitializeNotificationListener);
 
         try {
             aria2Version = aria2.version();
@@ -139,6 +141,8 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     public void onDestroy() {
         super.onDestroy();
         if (aria2 != null) aria2.removeListener(this);
+
+        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(reinitializeNotificationListener);
     }
 
     @TargetApi(Build.VERSION_CODES.O)
@@ -193,7 +197,10 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     }
 
     private void updateMonitor(@Nullable MonitorUpdate update) {
-        if (update == null || notificationManager == null) return;
+        if (update == null || notificationManager == null || !aria2.isRunning()) {
+            if (update != null) update.recycle();
+            return;
+        }
 
         RemoteViews layout = new RemoteViews(getPackageName(), R.layout.aria2lib_custom_notification);
         layout.setTextViewText(R.id.customNotification_runningTime, "Running time: " + CommonUtils.timeFormatter((System.currentTimeMillis() - startTime) / 1000));
