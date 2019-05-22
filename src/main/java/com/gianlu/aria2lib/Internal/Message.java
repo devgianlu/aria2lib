@@ -16,6 +16,7 @@ public final class Message {
             cache.add(new Message());
     }
 
+    public int delay;
     private Object o;
     private int i;
     private Type type;

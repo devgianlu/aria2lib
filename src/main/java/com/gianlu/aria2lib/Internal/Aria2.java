@@ -170,7 +170,7 @@ public final class Aria2 {
         if (Prefs.getBoolean(Aria2PK.SHOW_PERFORMANCE))
             new Thread(this.monitor = new Monitor(), "aria2android-monitorThread").start();
 
-        postMessage(Message.obtain(Message.Type.PROCESS_STARTED, startCommandForLog(execPath, params)));
+        postMessageDelayed(Message.obtain(Message.Type.PROCESS_STARTED, startCommandForLog(execPath, params)), 500 /* Ensure service is started */);
         return true;
     }
 
@@ -208,6 +208,12 @@ public final class Aria2 {
     }
 
     private void postMessage(@NonNull Message message) {
+        message.delay = 0;
+        messageHandler.queue.add(message);
+    }
+
+    private void postMessageDelayed(@NonNull Message message, int millis) {
+        message.delay = millis;
         messageHandler.queue.add(message);
     }
 
@@ -257,6 +263,10 @@ public final class Aria2 {
             while (!shouldStop) {
                 try {
                     Message msg = queue.take();
+
+                    if (msg.delay > 0)
+                        Thread.sleep(msg.delay);
+
                     for (MessageListener listener : new ArrayList<>(listeners))
                         listener.onMessage(msg);
 
