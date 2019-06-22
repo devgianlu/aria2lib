@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
 import android.preference.PreferenceManager;
@@ -61,8 +62,9 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     private String aria2Version;
 
     public static void startService(@NonNull Context context) {
-        ContextCompat.startForegroundService(context, new Intent(context, Aria2Service.class)
-                .setAction(ACTION_START_SERVICE));
+        new Handler(Looper.getMainLooper())
+                .post(() -> ContextCompat.startForegroundService(context, new Intent(context, Aria2Service.class)
+                        .setAction(ACTION_START_SERVICE)));
     }
 
     public static void stopService(@NonNull Context context) {
