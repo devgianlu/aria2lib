@@ -29,6 +29,7 @@ import com.gianlu.aria2lib.Aria2PK;
 import com.gianlu.aria2lib.BadEnvironmentException;
 import com.gianlu.aria2lib.BareConfigProvider;
 import com.gianlu.aria2lib.R;
+import com.gianlu.commonutils.Analytics.AnalyticsApplication;
 import com.gianlu.commonutils.CommonUtils;
 import com.gianlu.commonutils.Logging;
 import com.gianlu.commonutils.Preferences.Prefs;
@@ -60,11 +61,15 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
             initializeNotification();
     };
     private String aria2Version;
+    private long startReceivedAt = 0;
 
     public static void startService(@NonNull Context context) {
-        new Handler(Looper.getMainLooper())
-                .post(() -> ContextCompat.startForegroundService(context, new Intent(context, Aria2Service.class)
-                        .setAction(ACTION_START_SERVICE)));
+        new Handler(Looper.getMainLooper()).post(() -> {
+            ContextCompat.startForegroundService(context, new Intent(context, Aria2Service.class)
+                    .setAction(ACTION_START_SERVICE));
+
+            AnalyticsApplication.setCrashlyticsLong("aria2service_intentTime", System.currentTimeMillis());
+        });
     }
 
     public static void stopService(@NonNull Context context) {
@@ -159,6 +164,9 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
             if (Objects.equals(intent.getAction(), ACTION_START_SERVICE)) {
+                startReceivedAt = System.currentTimeMillis();
+                AnalyticsApplication.setCrashlyticsLong("aria2service_intentReceivedTime", System.currentTimeMillis());
+
                 try {
                     start();
                     return flags == 1 ? START_STICKY : START_REDELIVER_INTENT;
@@ -188,6 +196,9 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
 
         startForeground(NOTIFICATION_ID, defaultNotification.build());
         dispatchStatus();
+
+        if (startReceivedAt != 0)
+            AnalyticsApplication.setCrashlyticsInt("aria2service_startTime", (int) (System.currentTimeMillis() - startReceivedAt));
     }
 
     @Override
