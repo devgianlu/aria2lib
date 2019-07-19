@@ -46,9 +46,10 @@ dependencies {
     api project(':MaterialPreferences')
     api project(':LovelyMaterialPreferences')
 
-    api 'androidx.annotation:annotation:1.0.2'
-    api 'androidx.core:core:1.0.1'
+    api 'androidx.annotation:annotation:1.1.0'
+    api 'androidx.core:core:1.0.2'
     api 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+    api 'com.google.android.material:material:1.1.0-alpha08'
 
     // Needed to compile successfully
     api 'com.github.daniel-stoneuk:material-about-library:2.4.2'
