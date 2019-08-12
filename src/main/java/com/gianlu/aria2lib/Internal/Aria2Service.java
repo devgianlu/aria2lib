@@ -61,7 +61,6 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
             initializeNotification();
     };
     private String aria2Version;
-    private long startReceivedAt = 0;
 
     public static void startService(@NonNull Context context) {
         new Handler(Looper.getMainLooper()).post(() -> {
@@ -164,7 +163,6 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
             if (Objects.equals(intent.getAction(), ACTION_START_SERVICE)) {
-                startReceivedAt = System.currentTimeMillis();
                 AnalyticsApplication.setCrashlyticsLong("aria2service_intentReceivedTime", System.currentTimeMillis());
 
                 try {
@@ -189,16 +187,13 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     }
 
     private void start() throws IOException, BadEnvironmentException {
-        if (aria2.start())
-            startTime = System.currentTimeMillis();
+        startForeground(NOTIFICATION_ID, defaultNotification.build());
+        if (aria2.start()) startTime = System.currentTimeMillis();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) createChannel();
-
-        startForeground(NOTIFICATION_ID, defaultNotification.build());
         dispatchStatus();
 
-        if (startReceivedAt != 0)
-            AnalyticsApplication.setCrashlyticsInt("aria2service_startTime", (int) (System.currentTimeMillis() - startReceivedAt));
+        AnalyticsApplication.setCrashlyticsLong("aria2service_startedAt", System.currentTimeMillis());
     }
 
     @Override
