@@ -181,9 +181,12 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     }
 
     private void stop() {
-        aria2.stop();
-        stopForeground(true);
-        dispatchStatus();
+        try {
+            aria2.stop();
+            stopForeground(true);
+            dispatchStatus();
+        } catch (RuntimeException ignored) {
+        }
     }
 
     private void start() throws IOException, BadEnvironmentException {
