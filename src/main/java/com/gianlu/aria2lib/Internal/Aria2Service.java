@@ -16,6 +16,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 
@@ -45,9 +46,10 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     public static final String BROADCAST_STATUS = Aria2Service.class.getCanonicalName() + ".BROADCAST_STATUS";
     public static final int MESSAGE_STATUS = 2;
     public static final int MESSAGE_STOP = 3;
+    private static final int MESSAGE_START = 4;
     private static final String CHANNEL_ID = "aria2service";
     private static final String SERVICE_NAME = "Service for aria2";
-    private static final int NOTIFICATION_ID = 4;
+    private static final int NOTIFICATION_ID = 69;
     private final HandlerThread serviceThread = new HandlerThread("aria2-service");
     private Messenger messenger;
     private LocalBroadcastManager broadcastManager;
@@ -137,9 +139,7 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        if (messenger == null)
-            messenger = new Messenger(new LocalHandler(this));
-
+        if (messenger == null) messenger = new Messenger(new LocalHandler(this));
         return messenger.getBinder();
     }
 
@@ -166,10 +166,18 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
                 AnalyticsApplication.setCrashlyticsLong("aria2service_intentReceivedTime", System.currentTimeMillis());
 
                 try {
-                    start();
+                    if (messenger == null) messenger = new Messenger(new LocalHandler(this));
+                    messenger.send(Message.obtain(null, MESSAGE_START));
                     return flags == 1 ? START_STICKY : START_REDELIVER_INTENT;
-                } catch (IOException | BadEnvironmentException ex) {
-                    Logging.log(ex);
+                } catch (RemoteException ex) {
+                    Logging.log("Failed recreating starting executable on service thread!", ex);
+
+                    try {
+                        start();
+                        return flags == 1 ? START_STICKY : START_REDELIVER_INTENT;
+                    } catch (IOException | BadEnvironmentException exx) {
+                        Logging.log(exx);
+                    }
                 }
             } else if (Objects.equals(intent.getAction(), ACTION_STOP_SERVICE)) {
                 stop();
@@ -190,13 +198,15 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     }
 
     private void start() throws IOException, BadEnvironmentException {
+        AnalyticsApplication.setCrashlyticsLong("aria2service_startedAt", System.currentTimeMillis());
+
         startForeground(NOTIFICATION_ID, defaultNotification.build());
         if (aria2.start()) startTime = System.currentTimeMillis();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) createChannel();
         dispatchStatus();
 
-        AnalyticsApplication.setCrashlyticsLong("aria2service_startedAt", System.currentTimeMillis());
+        AnalyticsApplication.setCrashlyticsLong("aria2service_startedAt_return", System.currentTimeMillis());
     }
 
     @Override
@@ -264,6 +274,15 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
                 case MESSAGE_STOP:
                     service.stop();
                     service.stopSelf();
+                    break;
+                case MESSAGE_START:
+                    try {
+                        service.start();
+                    } catch (IOException | BadEnvironmentException ex) {
+                        Logging.log("Failed starting service!", ex);
+                        service.stop();
+                        service.stopSelf();
+                    }
                     break;
                 default:
                     super.handleMessage(msg);
