@@ -200,10 +200,10 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     private void start() throws IOException, BadEnvironmentException {
         AnalyticsApplication.setCrashlyticsLong("aria2service_startedAt", System.currentTimeMillis());
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) createChannel();
         startForeground(NOTIFICATION_ID, defaultNotification.build());
         if (aria2.start()) startTime = System.currentTimeMillis();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) createChannel();
         dispatchStatus();
 
         AnalyticsApplication.setCrashlyticsLong("aria2service_startedAt_return", System.currentTimeMillis());
