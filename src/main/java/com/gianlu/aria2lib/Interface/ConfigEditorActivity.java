@@ -13,11 +13,11 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.gianlu.aria2lib.Aria2PK;
 import com.gianlu.aria2lib.R;
-import com.gianlu.commonutils.CasualViews.RecyclerViewLayout;
+import com.gianlu.commonutils.CasualViews.RecyclerMessageView;
 import com.gianlu.commonutils.CasualViews.SuperTextView;
 import com.gianlu.commonutils.Dialogs.ActivityWithDialog;
 import com.gianlu.commonutils.NameValuePair;
@@ -36,23 +36,23 @@ import java.io.InputStreamReader;
 public class ConfigEditorActivity extends ActivityWithDialog implements SimpleOptionsAdapter.Listener {
     private static final int IMPORT_CODE = 1;
     private SimpleOptionsAdapter adapter;
-    private RecyclerViewLayout layout;
+    private RecyclerMessageView rmv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        layout = new RecyclerViewLayout(this);
-        setContentView(layout);
+        rmv = new RecyclerMessageView(this);
+        setContentView(rmv);
         setTitle(R.string.customOptions);
 
         ActionBar bar = getSupportActionBar();
         if (bar != null) bar.setDisplayHomeAsUpEnabled(true);
 
-        layout.useVerticalLinearLayoutManager();
-        layout.getList().addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        rmv.linearLayoutManager(RecyclerView.VERTICAL, false);
+        rmv.dividerDecoration(RecyclerView.VERTICAL);
         adapter = new SimpleOptionsAdapter(this, this);
-        layout.loadListData(adapter);
+        rmv.loadListData(adapter);
 
         try {
             load();
@@ -221,7 +221,7 @@ public class ConfigEditorActivity extends ActivityWithDialog implements SimpleOp
 
     @Override
     public void onItemsCountChanged(int count) {
-        if (count <= 0) layout.showInfo(R.string.noCustomOptions);
-        else layout.showList();
+        if (count <= 0) rmv.showInfo(R.string.noCustomOptions);
+        else rmv.showList();
     }
 }

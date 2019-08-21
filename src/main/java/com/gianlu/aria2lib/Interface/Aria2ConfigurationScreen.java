@@ -180,7 +180,7 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
         addView(logsCategory);
 
         logsMessage = new MessageView(getContext());
-        logsMessage.setInfo(R.string.noLogs);
+        logsMessage.info(R.string.noLogs);
         logsCategory.addView(logsMessage);
         logsMessage.setVisibility(View.VISIBLE);
 

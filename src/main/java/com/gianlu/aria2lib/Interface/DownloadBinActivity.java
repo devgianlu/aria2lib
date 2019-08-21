@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.gianlu.aria2lib.Aria2Downloader;
 import com.gianlu.aria2lib.Aria2PK;
@@ -20,7 +21,7 @@ import com.gianlu.aria2lib.GitHubApi;
 import com.gianlu.aria2lib.R;
 import com.gianlu.commonutils.Analytics.AnalyticsApplication;
 import com.gianlu.commonutils.AskPermission;
-import com.gianlu.commonutils.CasualViews.RecyclerViewLayout;
+import com.gianlu.commonutils.CasualViews.RecyclerMessageView;
 import com.gianlu.commonutils.Dialogs.ActivityWithDialog;
 import com.gianlu.commonutils.Logging;
 import com.gianlu.commonutils.Preferences.Prefs;
@@ -35,7 +36,7 @@ import java.util.List;
 public class DownloadBinActivity extends ActivityWithDialog implements ReleasesAdapter.Listener, GitHubApi.OnResult<List<GitHubApi.Release>>, Aria2Downloader.DownloadRelease, Aria2Downloader.ExtractTo {
     public static final String ACTION_IMPORT_BIN = "imported_bin";
     private static final int IMPORT_BIN_CODE = 8;
-    private RecyclerViewLayout layout;
+    private RecyclerMessageView rmv;
     private Aria2Downloader downloader;
     private Class<? extends Activity> startAfter;
 
@@ -57,12 +58,12 @@ public class DownloadBinActivity extends ActivityWithDialog implements ReleasesA
         // noinspection unchecked
         startAfter = (Class<? extends Activity>) getIntent().getSerializableExtra("startAfter");
 
-        layout = new RecyclerViewLayout(this);
-        layout.useVerticalLinearLayoutManager();
-        setContentView(layout);
+        rmv = new RecyclerMessageView(this);
+        rmv.linearLayoutManager(RecyclerView.VERTICAL, false);
+        setContentView(rmv);
         setTitle(getIntent().getStringExtra("title"));
 
-        layout.showInfo(R.string.retrievingReleases);
+        rmv.showInfo(R.string.retrievingReleases);
         downloader = new Aria2Downloader();
 
         if (getIntent().getBooleanExtra("importBin", false)) {
@@ -146,18 +147,18 @@ public class DownloadBinActivity extends ActivityWithDialog implements ReleasesA
 
     @Override
     public void onResult(@NonNull List<GitHubApi.Release> result) {
-        layout.loadListData(new ReleasesAdapter(this, result, this));
+        rmv.loadListData(new ReleasesAdapter(this, result, this));
     }
 
     @Override
     public void onException(@NonNull Exception ex) {
         Logging.log(ex);
-        layout.showError(R.string.failedRetrievingReleases_reason, ex.getMessage());
+        rmv.showError(R.string.failedRetrievingReleases_reason, ex.getMessage());
     }
 
     @Override
     public void onReleaseSelected(@NonNull GitHubApi.Release release) {
-        layout.showInfo(R.string.downloadingBin);
+        rmv.showInfo(R.string.downloadingBin);
 
         downloader.setRelease(release);
         downloader.downloadRelease(this);
@@ -165,7 +166,7 @@ public class DownloadBinActivity extends ActivityWithDialog implements ReleasesA
 
     @Override
     public void doneDownload(@NonNull File tmp) {
-        layout.showInfo(R.string.extractingBin);
+        rmv.showInfo(R.string.extractingBin);
         downloader.extractTo(getEnvDir(), (entry, name) -> name.equals("aria2c"), this);
     }
 
@@ -181,7 +182,7 @@ public class DownloadBinActivity extends ActivityWithDialog implements ReleasesA
 
     @Override
     public void doneExtract(@NonNull File dest) {
-        layout.showInfo(R.string.binExtracted);
+        rmv.showInfo(R.string.binExtracted);
 
         Prefs.putBoolean(Aria2PK.CUSTOM_BIN, false);
         Prefs.putString(Aria2PK.ENV_LOCATION, dest.getAbsolutePath());
