@@ -32,19 +32,13 @@ android {
 }
 
 dependencies {
-    api(project(':CommonUtils')) {
+    implementation(project(':CommonUtils')) {
         transitive = false
     }
 
-    api project(':MaterialPreferences')
-    api project(':LovelyMaterialPreferences')
+    api 'com.github.devgianlu.MaterialPreferences:library:master-SNAPSHOT'
+    api 'com.github.devgianlu.MaterialPreferences:lovelyinput:master-SNAPSHOT'
 
-    api 'androidx.annotation:annotation:1.1.0'
-    api 'androidx.core:core:1.0.2'
     api 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
     api 'com.google.android.material:material:1.1.0-alpha09'
-
-    // Needed to compile successfully
-    api 'com.github.daniel-stoneuk:material-about-library:2.4.2'
-    api 'androidx.appcompat:appcompat:1.0.2'
 }
