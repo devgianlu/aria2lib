@@ -36,11 +36,11 @@ import com.yarolegovich.mp.io.MaterialPreferences;
 import java.io.File;
 
 public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
-
-    private MaterialPreferenceCategory generalCategory;
+    private final MaterialPreferenceCategory generalCategory;
+    private final MaterialPreferenceCategory rpcCategory;
+    private final MaterialPreferenceCategory notificationsCategory;
+    private final MaterialPreferenceCategory logsCategory;
     private MaterialEditTextPreference outputPath;
-    private MaterialPreferenceCategory rpcCategory;
-    private MaterialPreferenceCategory notificationsCategory;
     private LinearLayout logsContainer;
     private MessageView logsMessage;
 
@@ -54,6 +54,13 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
 
     public Aria2ConfigurationScreen(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
+        inflate(context, R.layout.aria2lib_conf_screen, this);
+
+        generalCategory = findViewById(R.id.aria2lib_confScreen_general);
+        rpcCategory = findViewById(R.id.aria2lib_confScreen_rpc);
+        notificationsCategory = findViewById(R.id.aria2lib_confScreen_notifications);
+        logsCategory = findViewById(R.id.aria2lib_confScreen_logs);
     }
 
     public void setup(@NonNull AbsMaterialPreference.OverrideOnClickListener outputPathListener, @Nullable Prefs.KeyWithDefault<Boolean> startAtBootPref, boolean rpcEnabled) {
@@ -80,10 +87,8 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
                 .build());
 
         // General
-        generalCategory = new MaterialPreferenceCategory(getContext());
         generalCategory.setTitle(R.string.general);
         generalCategory.setTitleColorRes(R.color.colorAccent);
-        addView(generalCategory);
 
         outputPath = new MaterialEditTextPreference.Builder(getContext())
                 .showValueMode(AbsMaterialTextValuePreference.SHOW_ON_BOTTOM)
@@ -119,10 +124,9 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
 
         // RPC
         if (rpcEnabled) {
-            rpcCategory = new MaterialPreferenceCategory(getContext());
+            rpcCategory.setVisibility(VISIBLE);
             rpcCategory.setTitleColorRes(R.color.colorAccent);
             rpcCategory.setTitle(R.string.rpc);
-            addView(rpcCategory);
 
             MaterialEditTextPreference rpcPort = new MaterialEditTextPreference.Builder(getContext())
                     .showValueMode(AbsMaterialTextValuePreference.SHOW_ON_RIGHT)
@@ -147,13 +151,13 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
             allowOriginAll.setTitle(R.string.accessControlAllowOriginAll);
             allowOriginAll.setSummary(R.string.accessControlAllowOriginAll_summary);
             rpcCategory.addView(allowOriginAll);
+        } else {
+            rpcCategory.setVisibility(GONE);
         }
 
         // Notifications
-        notificationsCategory = new MaterialPreferenceCategory(getContext());
         notificationsCategory.setTitle(R.string.notification);
         notificationsCategory.setTitleColorRes(R.color.colorAccent);
-        addView(notificationsCategory);
 
         MaterialCheckboxPreference showPerformance = new MaterialCheckboxPreference.Builder(getContext())
                 .key(Aria2PK.SHOW_PERFORMANCE.key())
@@ -174,10 +178,8 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
         setVisibilityController(showPerformance, new AbsMaterialPreference[]{updateDelay}, true);
 
         // Logs
-        MaterialPreferenceCategory logsCategory = new MaterialPreferenceCategory(getContext());
         logsCategory.setTitleColorRes(R.color.colorAccent);
         logsCategory.setTitle(R.string.logs);
-        addView(logsCategory);
 
         logsMessage = new MessageView(getContext());
         logsMessage.info(R.string.noLogs);
