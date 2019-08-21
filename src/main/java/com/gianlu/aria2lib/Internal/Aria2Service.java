@@ -170,7 +170,7 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
                     messenger.send(Message.obtain(null, MESSAGE_START));
                     return flags == 1 ? START_STICKY : START_REDELIVER_INTENT;
                 } catch (RemoteException ex) {
-                    Logging.log("Failed recreating starting executable on service thread!", ex);
+                    Logging.log("Failed starting executable on service thread!", ex);
 
                     try {
                         start();
