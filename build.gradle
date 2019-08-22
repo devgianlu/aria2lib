@@ -33,7 +33,7 @@ android {
 
 dependencies {
     implementation(project(':CommonUtils')) {
-        transitive = false
+        exclude group: 'com.getkeepsafe.taptargetview'
     }
 
     api 'com.github.devgianlu.MaterialPreferences:library:master-SNAPSHOT'
