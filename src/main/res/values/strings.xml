@@ -60,4 +60,9 @@
     <string name="updatedApp_importedConfig">Imported config file</string>
     <string name="updatedApp_importedConfig_message">This version of the app introduced a new feature: the custom options editor. Your config file has been imported here.</string>
     <string name="failedLoadingOptions">Failed loading custom options!</string>
+    <plurals name="customOptions_summary">
+        <item quantity="zero">You have no custom options.</item>
+        <item quantity="one">You have one custom option.</item>
+        <item quantity="other">You have %d custom options.</item>
+    </plurals>
 </resources>

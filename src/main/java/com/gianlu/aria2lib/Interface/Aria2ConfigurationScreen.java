@@ -20,6 +20,7 @@ import com.gianlu.aria2lib.Aria2Ui;
 import com.gianlu.aria2lib.R;
 import com.gianlu.commonutils.CasualViews.MessageView;
 import com.gianlu.commonutils.Logging;
+import com.gianlu.commonutils.Preferences.Json.JsonStoring;
 import com.gianlu.commonutils.Preferences.Prefs;
 import com.gianlu.commonutils.Toaster;
 import com.yarolegovich.lovelyuserinput.LovelyInput;
@@ -33,6 +34,9 @@ import com.yarolegovich.mp.MaterialSeekBarPreference;
 import com.yarolegovich.mp.MaterialStandardPreference;
 import com.yarolegovich.mp.io.MaterialPreferences;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 
 public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
@@ -43,6 +47,7 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
     private MaterialEditTextPreference outputPath;
     private LinearLayout logsContainer;
     private MessageView logsMessage;
+    private MaterialStandardPreference customOptions;
 
     public Aria2ConfigurationScreen(Context context) {
         this(context, null, 0);
@@ -61,6 +66,19 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
         rpcCategory = findViewById(R.id.aria2lib_confScreen_rpc);
         notificationsCategory = findViewById(R.id.aria2lib_confScreen_notifications);
         logsCategory = findViewById(R.id.aria2lib_confScreen_logs);
+    }
+
+    public void refreshCustomOptionsNumber() {
+        int customOptionsNum;
+        try {
+            JSONObject obj = JsonStoring.intoPrefs().getJsonObject(Aria2PK.CUSTOM_OPTIONS);
+            if (obj == null) customOptionsNum = 0;
+            else customOptionsNum = obj.length();
+        } catch (JSONException ex) {
+            customOptionsNum = 0;
+        }
+
+        customOptions.setSummary(getResources().getQuantityString(R.plurals.customOptions_summary, customOptionsNum, customOptionsNum));
     }
 
     public void setup(@NonNull AbsMaterialPreference.OverrideOnClickListener outputPathListener, @Nullable Prefs.KeyWithDefault<Boolean> startAtBootPref, boolean rpcEnabled) {
@@ -117,10 +135,11 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
             generalCategory.addView(startAtBoot);
         }
 
-        MaterialStandardPreference customOptions = new MaterialStandardPreference(getContext());
+        customOptions = new MaterialStandardPreference(getContext());
         customOptions.setOnClickListener(v -> getContext().startActivity(new Intent(getContext(), ConfigEditorActivity.class)));
         customOptions.setTitle(R.string.customOptions);
         generalCategory.addView(customOptions);
+        refreshCustomOptionsNumber();
 
         // RPC
         if (rpcEnabled) {
