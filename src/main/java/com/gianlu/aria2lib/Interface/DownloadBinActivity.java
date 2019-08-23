@@ -186,9 +186,14 @@ public class DownloadBinActivity extends ActivityWithDialog implements ReleasesA
 
         Prefs.putBoolean(Aria2PK.CUSTOM_BIN, false);
         Prefs.putString(Aria2PK.ENV_LOCATION, dest.getAbsolutePath());
-        startActivity(new Intent(this, startAfter)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-        finish();
+
+        if (startAfter != null) {
+            startActivity(new Intent(this, startAfter)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+            finish();
+        } else {
+            System.exit(0);
+        }
     }
 
     @Override
