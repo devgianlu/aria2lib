@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -18,11 +18,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.gianlu.aria2lib.Aria2PK;
 import com.gianlu.aria2lib.R;
 import com.gianlu.commonutils.CasualViews.RecyclerMessageView;
-import com.gianlu.commonutils.CasualViews.SuperTextView;
+import com.gianlu.commonutils.CommonUtils;
 import com.gianlu.commonutils.Dialogs.ActivityWithDialog;
 import com.gianlu.commonutils.NameValuePair;
 import com.gianlu.commonutils.Preferences.Json.JsonStoring;
 import com.gianlu.commonutils.Toaster;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
 
@@ -139,24 +141,22 @@ public class ConfigEditorActivity extends ActivityWithDialog implements SimpleOp
     @SuppressLint("InflateParams")
     private void showAddDialog() {
         LinearLayout layout = (LinearLayout) getLayoutInflater().inflate(R.layout.aria2lib_dialog_new_option, null, false);
-        final EditText key = layout.findViewById(R.id.editOptionDialog_key);
-        final EditText value = layout.findViewById(R.id.editOptionDialog_value);
+        TextInputLayout key = layout.findViewById(R.id.editOptionDialog_key);
+        TextInputLayout value = layout.findViewById(R.id.editOptionDialog_value);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.newOption)
-                .setView(layout)
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
+        builder.setTitle(R.string.newOption).setView(layout)
                 .setPositiveButton(R.string.apply, (dialogInterface, i) -> {
-                    String keyStr = key.getText().toString();
+                    String keyStr = CommonUtils.getText(key);
                     if (keyStr.startsWith("--")) keyStr = keyStr.substring(2);
-                    adapter.add(new NameValuePair(keyStr, value.getText().toString()));
-                })
-                .setNegativeButton(android.R.string.cancel, null);
+                    adapter.add(new NameValuePair(keyStr, CommonUtils.getText(value)));
+                }).setNegativeButton(android.R.string.cancel, null);
 
         showDialog(builder);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.configEditor_add) {
             showAddDialog();
@@ -201,16 +201,15 @@ public class ConfigEditorActivity extends ActivityWithDialog implements SimpleOp
     @Override
     @SuppressLint("InflateParams")
     public void onEditOption(@NonNull final NameValuePair option) {
-        LinearLayout layout = (LinearLayout) getLayoutInflater().inflate(R.layout.aria2lib_dialog_edit_option, null, false);
-        SuperTextView value = layout.findViewById(R.id.editOptionDialog_value);
-        value.setHtml(R.string.currentValue, option.value());
-        EditText newValue = layout.findViewById(R.id.editOptionDialog_newValue);
+        FrameLayout layout = (FrameLayout) getLayoutInflater().inflate(R.layout.aria2lib_dialog_edit_option, null, false);
+        TextInputLayout newValue = layout.findViewById(R.id.editOptionDialog_value);
+        CommonUtils.setText(newValue, option.value());
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setTitle(option.key())
                 .setView(layout)
                 .setPositiveButton(R.string.apply, (dialogInterface, i) -> {
-                    String newValueStr = newValue.getText().toString();
+                    String newValueStr = CommonUtils.getText(newValue);
                     if (!newValueStr.equals(option.value()))
                         adapter.set(new NameValuePair(option.key(), newValueStr));
                 })

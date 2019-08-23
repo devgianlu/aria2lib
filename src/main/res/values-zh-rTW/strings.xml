@@ -50,11 +50,11 @@
     <string name="updatedApp_importedConfig_message">此版本的 App 引入了一項新功能:自訂設定編輯器。您的設定檔案已在此處導入。</string>
     <string name="failedLoadingOptions">載入自訂設定失敗!</string>
     <string name="add">增加</string>
-    <string name="newValue">新的值:</string>
+    <string name="newValue">新的值</string>
     <string name="apply">應用</string>
     <string name="currentValue"><b>當前值:</b>%s</string>
-    <string name="key">鍵:</string>
-    <string name="value">值:</string>
+    <string name="key">鍵</string>
+    <string name="value">值</string>
     <string name="newOption">新設定</string>
     <string name="logTerminated">Terminated with exit code %d.</string>
     <string name="logStarted">Started: %s</string>

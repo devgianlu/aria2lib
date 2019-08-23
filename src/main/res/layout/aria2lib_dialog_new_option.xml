@@ -5,43 +5,32 @@
     android:orientation="vertical"
     android:padding="24dp">
 
-    <LinearLayout
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editOptionDialog_key"
         android:layout_width="match_parent"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:orientation="horizontal">
+        android:hint="@string/key">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="4dp"
-            android:text="@string/key"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/editOptionDialog_key"
+        <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textNoSuggestions" />
-    </LinearLayout>
 
-    <LinearLayout
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editOptionDialog_value"
         android:layout_width="match_parent"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_marginTop="16dp"
+        android:hint="@string/value">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="4dp"
-            android:text="@string/value"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/editOptionDialog_value"
+        <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textNoSuggestions" />
-    </LinearLayout>
+
+    </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>
