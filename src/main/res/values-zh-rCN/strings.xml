@@ -59,4 +59,11 @@
     <string name="updatedApp_importedConfig">导入的配置文件</string>
     <string name="updatedApp_importedConfig_message">此版本的应用程序引入了一项新功能：自定义选项编辑器。您的配置文件已导入到此处。</string>
     <string name="failedLoadingOptions">加载自定义选项失败!</string>
+    <string name="delete">删除</string>
+    <string name="edit">编辑</string>
+    <plurals name="customOptions_summary">
+        <item quantity="zero">您没有自定义选项。</item>
+        <item quantity="one">您有一个自定义选项。</item>
+        <item quantity="other">您有%d个自定义选项。</item>
+    </plurals>
 </resources>
