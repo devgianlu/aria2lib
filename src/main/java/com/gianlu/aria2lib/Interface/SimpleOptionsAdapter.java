@@ -71,7 +71,7 @@ public class SimpleOptionsAdapter extends RecyclerView.Adapter<SimpleOptionsAdap
         });
         holder.delete.setOnClickListener(view -> remove(holder.getAdapterPosition()));
 
-        if (edited.contains(position)) CommonUtils.setTextColor(holder.value, R.color.colorAccent);
+        if (edited.contains(position)) CommonUtils.setTextColor(holder.value, R.color.colorPrimary);
         else CommonUtils.setTextColor(holder.value, android.R.color.tertiary_text_light);
     }
 

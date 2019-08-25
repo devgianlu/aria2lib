@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Environment;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -60,7 +61,7 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
     public Aria2ConfigurationScreen(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        inflate(context, R.layout.aria2lib_conf_screen, this);
+        inflate(new ContextThemeWrapper(context, R.style.AppTheme), R.layout.aria2lib_conf_screen, this);
 
         generalCategory = findViewById(R.id.aria2lib_confScreen_general);
         rpcCategory = findViewById(R.id.aria2lib_confScreen_rpc);
@@ -106,7 +107,6 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
 
         // General
         generalCategory.setTitle(R.string.general);
-        generalCategory.setTitleColorRes(R.color.colorAccent);
 
         outputPath = new MaterialEditTextPreference.Builder(getContext())
                 .showValueMode(AbsMaterialTextValuePreference.SHOW_ON_BOTTOM)
@@ -144,7 +144,6 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
         // RPC
         if (rpcEnabled) {
             rpcCategory.setVisibility(VISIBLE);
-            rpcCategory.setTitleColorRes(R.color.colorAccent);
             rpcCategory.setTitle(R.string.rpc);
 
             MaterialEditTextPreference rpcPort = new MaterialEditTextPreference.Builder(getContext())
@@ -176,7 +175,6 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
 
         // Notifications
         notificationsCategory.setTitle(R.string.notification);
-        notificationsCategory.setTitleColorRes(R.color.colorAccent);
 
         MaterialCheckboxPreference showPerformance = new MaterialCheckboxPreference.Builder(getContext())
                 .key(Aria2PK.SHOW_PERFORMANCE.key())
@@ -197,7 +195,6 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
         setVisibilityController(showPerformance, new AbsMaterialPreference[]{updateDelay}, true);
 
         // Logs
-        logsCategory.setTitleColorRes(R.color.colorAccent);
         logsCategory.setTitle(R.string.logs);
 
         logsMessage = new MessageView(getContext());
