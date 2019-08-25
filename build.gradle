@@ -37,8 +37,8 @@ dependencies {
         exclude group: 'com.getkeepsafe.taptargetview'
     }
 
-    api 'com.github.devgianlu.MaterialPreferences:library:master-SNAPSHOT'
-    api 'com.github.devgianlu.MaterialPreferences:lovelyinput:master-SNAPSHOT'
+    api 'com.github.devgianlu.MaterialPreferences:library:b0d322a322'
+    api 'com.github.devgianlu.MaterialPreferences:lovelyinput:b0d322a322'
 
     api 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
     api 'com.google.android.material:material:1.1.0-alpha09'
