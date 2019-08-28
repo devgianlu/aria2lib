@@ -49,6 +49,7 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
     private LinearLayout logsContainer;
     private MessageView logsMessage;
     private MaterialStandardPreference customOptions;
+    private boolean rpcEnabled = false;
 
     public Aria2ConfigurationScreen(Context context) {
         this(context, null, 0);
@@ -83,6 +84,8 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
     }
 
     public void setup(@NonNull AbsMaterialPreference.OverrideOnClickListener outputPathListener, @Nullable Prefs.KeyWithDefault<Boolean> startAtBootPref, boolean rpcEnabled) {
+        this.rpcEnabled = rpcEnabled;
+
         MaterialPreferences.instance().setUserInputModule(new LovelyInput.Builder()
                 .addIcon(Aria2PK.OUTPUT_DIRECTORY.key(), R.drawable.baseline_folder_24)
                 .addTextFilter(Aria2PK.OUTPUT_DIRECTORY.key(), R.string.invalidOutputPath, text -> {
@@ -222,11 +225,11 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
     public void lockPreferences(boolean set) {
         if (set) {
             generalCategory.setVisibility(GONE);
-            if (rpcCategory != null) rpcCategory.setVisibility(GONE);
+            if (rpcEnabled) rpcCategory.setVisibility(GONE);
             notificationsCategory.setVisibility(GONE);
         } else {
             generalCategory.setVisibility(VISIBLE);
-            if (rpcCategory != null) rpcCategory.setVisibility(VISIBLE);
+            if (rpcEnabled) rpcCategory.setVisibility(VISIBLE);
             notificationsCategory.setVisibility(VISIBLE);
         }
     }
