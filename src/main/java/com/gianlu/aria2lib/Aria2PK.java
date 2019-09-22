@@ -2,8 +2,8 @@ package com.gianlu.aria2lib;
 
 import android.os.Environment;
 
-import com.gianlu.commonutils.preferences.CommonPK;
-import com.gianlu.commonutils.preferences.Prefs;
+import com.gianlu.commonutils.CommonPK;
+import com.gianlu.commonutils.Preferences.Prefs;
 
 public class Aria2PK extends CommonPK {
     public static final Prefs.KeyWithDefault<Integer> NOTIFICATION_UPDATE_DELAY = new Prefs.KeyWithDefault<>("updateDelay", 1);
