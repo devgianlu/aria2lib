@@ -1,4 +1,4 @@
-package com.gianlu.aria2lib.Internal;
+package com.gianlu.aria2lib.internal;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
@@ -30,10 +30,10 @@ import com.gianlu.aria2lib.Aria2PK;
 import com.gianlu.aria2lib.BadEnvironmentException;
 import com.gianlu.aria2lib.BareConfigProvider;
 import com.gianlu.aria2lib.R;
-import com.gianlu.commonutils.Analytics.AnalyticsApplication;
 import com.gianlu.commonutils.CommonUtils;
-import com.gianlu.commonutils.Logging;
-import com.gianlu.commonutils.Preferences.Prefs;
+import com.gianlu.commonutils.analytics.AnalyticsApplication;
+import com.gianlu.commonutils.logging.Logging;
+import com.gianlu.commonutils.preferences.Prefs;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -210,10 +210,10 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     }
 
     @Override
-    public void onMessage(@NonNull com.gianlu.aria2lib.Internal.Message msg) {
+    public void onMessage(@NonNull com.gianlu.aria2lib.internal.Message msg) {
         dispatch(msg);
 
-        if (msg.type() == com.gianlu.aria2lib.Internal.Message.Type.MONITOR_UPDATE)
+        if (msg.type() == com.gianlu.aria2lib.internal.Message.Type.MONITOR_UPDATE)
             updateMonitor((MonitorUpdate) msg.object());
     }
 
@@ -238,14 +238,14 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
         update.recycle();
     }
 
-    private void dispatch(@NonNull com.gianlu.aria2lib.Internal.Message msg) {
+    private void dispatch(@NonNull com.gianlu.aria2lib.internal.Message msg) {
         Intent intent = new Intent(BROADCAST_MESSAGE);
         intent.putExtra("type", msg.type());
         intent.putExtra("i", msg.integer());
         if (msg.object() instanceof Serializable) intent.putExtra("o", (Serializable) msg.object());
         broadcastManager.sendBroadcast(intent);
 
-        if (msg.type() != com.gianlu.aria2lib.Internal.Message.Type.MONITOR_UPDATE)
+        if (msg.type() != com.gianlu.aria2lib.internal.Message.Type.MONITOR_UPDATE)
             Logging.log(msg.toLogLine(aria2Version));
     }
 

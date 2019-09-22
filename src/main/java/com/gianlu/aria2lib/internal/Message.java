@@ -1,9 +1,9 @@
-package com.gianlu.aria2lib.Internal;
+package com.gianlu.aria2lib.internal;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.gianlu.commonutils.Logging;
+import com.gianlu.commonutils.logging.Logging;
 
 import java.util.LinkedList;
 import java.util.Queue;

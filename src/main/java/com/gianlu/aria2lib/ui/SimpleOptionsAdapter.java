@@ -1,6 +1,7 @@
-package com.gianlu.aria2lib.Interface;
+package com.gianlu.aria2lib.ui;
 
 import android.content.Context;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -13,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gianlu.aria2lib.R;
 import com.gianlu.commonutils.CommonUtils;
-import com.gianlu.commonutils.NameValuePair;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ import java.util.Set;
 
 @UiThread
 public class SimpleOptionsAdapter extends RecyclerView.Adapter<SimpleOptionsAdapter.ViewHolder> {
-    private final List<NameValuePair> options;
+    private final List<Pair<String, String>> options;
     private final LayoutInflater inflater;
     private final Listener listener;
     private final Set<Integer> edited;
@@ -40,15 +41,15 @@ public class SimpleOptionsAdapter extends RecyclerView.Adapter<SimpleOptionsAdap
     }
 
     @NonNull
-    private static List<NameValuePair> parseOptions(@NonNull String str) {
-        List<NameValuePair> list = new ArrayList<>();
+    private static List<Pair<String, String>> parseOptions(@NonNull String str) {
+        List<Pair<String, String>> list = new ArrayList<>();
         String[] lines = str.split("\n");
         for (String line : lines) {
             line = line.trim();
             if (line.startsWith("#")) continue;
             String[] split = line.split("=");
             if (split.length > 0)
-                list.add(new NameValuePair(split[0], split.length == 1 ? null : split[1]));
+                list.add(new Pair<>(split[0], split.length == 1 ? null : split[1]));
         }
 
         return list;
@@ -62,10 +63,10 @@ public class SimpleOptionsAdapter extends RecyclerView.Adapter<SimpleOptionsAdap
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        NameValuePair entry = options.get(position);
+        Pair<String, String> entry = options.get(position);
 
-        holder.key.setText(entry.key());
-        holder.value.setText(entry.value());
+        holder.key.setText(entry.first);
+        holder.value.setText(entry.second);
         holder.edit.setOnClickListener(view -> {
             if (listener != null) listener.onEditOption(entry);
         });
@@ -107,9 +108,9 @@ public class SimpleOptionsAdapter extends RecyclerView.Adapter<SimpleOptionsAdap
         if (listener != null) listener.onItemsCountChanged(options.size());
     }
 
-    public void set(@NonNull NameValuePair newOption) {
+    public void set(@NonNull Pair<String, String> newOption) {
         for (int i = 0; i < options.size(); i++) {
-            if (options.get(i).key().equals(newOption.key())) {
+            if (options.get(i).first.equals(newOption.first)) {
                 options.set(i, newOption);
                 edited.add(i);
                 changed();
@@ -120,18 +121,18 @@ public class SimpleOptionsAdapter extends RecyclerView.Adapter<SimpleOptionsAdap
     }
 
     @NonNull
-    public List<NameValuePair> get() {
+    public List<Pair<String, String>> get() {
         return options;
     }
 
-    public void load(@Nullable JSONObject obj) {
+    public void load(@Nullable JSONObject obj) throws JSONException {
         options.clear();
 
         if (obj != null) {
             Iterator<String> iterator = obj.keys();
             while (iterator.hasNext()) {
                 String key = iterator.next();
-                options.add(new NameValuePair(key, obj.optString(key, null)));
+                options.add(new Pair<>(key, obj.getString(key)));
             }
         }
 
@@ -140,7 +141,7 @@ public class SimpleOptionsAdapter extends RecyclerView.Adapter<SimpleOptionsAdap
     }
 
     public void parseAndAdd(@NonNull String str) {
-        List<NameValuePair> newOptions = parseOptions(str);
+        List<Pair<String, String>> newOptions = parseOptions(str);
         options.addAll(newOptions);
         notifyItemRangeInserted(options.size() - newOptions.size(), newOptions.size());
         changed();
@@ -148,7 +149,7 @@ public class SimpleOptionsAdapter extends RecyclerView.Adapter<SimpleOptionsAdap
         if (listener != null) listener.onItemsCountChanged(options.size());
     }
 
-    public void add(@NonNull NameValuePair option) {
+    public void add(@NonNull Pair<String, String> option) {
         options.add(option);
         edited.add(options.size() - 1);
         changed();
@@ -158,7 +159,7 @@ public class SimpleOptionsAdapter extends RecyclerView.Adapter<SimpleOptionsAdap
     }
 
     public interface Listener {
-        void onEditOption(@NonNull NameValuePair option);
+        void onEditOption(@NonNull Pair<String, String> option);
 
         void onItemsCountChanged(int count);
     }

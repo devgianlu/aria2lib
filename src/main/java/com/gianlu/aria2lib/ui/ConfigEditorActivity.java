@@ -1,10 +1,11 @@
-package com.gianlu.aria2lib.Interface;
+package com.gianlu.aria2lib.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
@@ -17,16 +18,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gianlu.aria2lib.Aria2PK;
 import com.gianlu.aria2lib.R;
-import com.gianlu.commonutils.CasualViews.RecyclerMessageView;
 import com.gianlu.commonutils.CommonUtils;
-import com.gianlu.commonutils.Dialogs.ActivityWithDialog;
-import com.gianlu.commonutils.NameValuePair;
-import com.gianlu.commonutils.Preferences.Json.JsonStoring;
-import com.gianlu.commonutils.Toaster;
+import com.gianlu.commonutils.dialogs.ActivityWithDialog;
+import com.gianlu.commonutils.misc.RecyclerMessageView;
+import com.gianlu.commonutils.preferences.json.JsonStoring;
+import com.gianlu.commonutils.ui.Toaster;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -34,11 +35,19 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 
 public class ConfigEditorActivity extends ActivityWithDialog implements SimpleOptionsAdapter.Listener {
     private static final int IMPORT_CODE = 1;
     private SimpleOptionsAdapter adapter;
     private RecyclerMessageView rmv;
+
+    @NonNull
+    private static JSONObject toJson(List<Pair<String, String>> list) throws JSONException {
+        JSONObject obj = new JSONObject();
+        for (Pair<String, String> pair : list) obj.put(pair.first, pair.second);
+        return obj;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +104,7 @@ public class ConfigEditorActivity extends ActivityWithDialog implements SimpleOp
 
     private void save() {
         try {
-            JsonStoring.intoPrefs().putJsonObject(Aria2PK.CUSTOM_OPTIONS, NameValuePair.toJson(adapter.get()));
+            JsonStoring.intoPrefs().putJsonObject(Aria2PK.CUSTOM_OPTIONS, toJson(adapter.get()));
             adapter.saved();
         } catch (JSONException ex) {
             Toaster.with(this).message(R.string.failedSavingCustomOptions).ex(ex).show();
@@ -149,7 +158,7 @@ public class ConfigEditorActivity extends ActivityWithDialog implements SimpleOp
                 .setPositiveButton(R.string.apply, (dialogInterface, i) -> {
                     String keyStr = CommonUtils.getText(key);
                     if (keyStr.startsWith("--")) keyStr = keyStr.substring(2);
-                    adapter.add(new NameValuePair(keyStr, CommonUtils.getText(value)));
+                    adapter.add(new Pair<>(keyStr, CommonUtils.getText(value)));
                 }).setNegativeButton(android.R.string.cancel, null);
 
         showDialog(builder);
@@ -200,18 +209,18 @@ public class ConfigEditorActivity extends ActivityWithDialog implements SimpleOp
 
     @Override
     @SuppressLint("InflateParams")
-    public void onEditOption(@NonNull final NameValuePair option) {
+    public void onEditOption(@NonNull Pair<String, String> option) {
         FrameLayout layout = (FrameLayout) getLayoutInflater().inflate(R.layout.aria2lib_dialog_edit_option, null, false);
         TextInputLayout newValue = layout.findViewById(R.id.editOptionDialog_value);
-        CommonUtils.setText(newValue, option.value());
+        CommonUtils.setText(newValue, option.second);
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
-        builder.setTitle(option.key())
+        builder.setTitle(option.first)
                 .setView(layout)
                 .setPositiveButton(R.string.apply, (dialogInterface, i) -> {
                     String newValueStr = CommonUtils.getText(newValue);
-                    if (!newValueStr.equals(option.value()))
-                        adapter.set(new NameValuePair(option.key(), newValueStr));
+                    if (!newValueStr.equals(option.second))
+                        adapter.set(new Pair<>(option.first, newValueStr));
                 })
                 .setNegativeButton(android.R.string.cancel, null);
 

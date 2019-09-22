@@ -1,4 +1,4 @@
-package com.gianlu.aria2lib.Interface;
+package com.gianlu.aria2lib.ui;
 
 import android.Manifest;
 import android.app.Activity;
@@ -19,13 +19,13 @@ import com.gianlu.aria2lib.Aria2Downloader;
 import com.gianlu.aria2lib.Aria2PK;
 import com.gianlu.aria2lib.GitHubApi;
 import com.gianlu.aria2lib.R;
-import com.gianlu.commonutils.Analytics.AnalyticsApplication;
-import com.gianlu.commonutils.AskPermission;
-import com.gianlu.commonutils.CasualViews.RecyclerMessageView;
-import com.gianlu.commonutils.Dialogs.ActivityWithDialog;
-import com.gianlu.commonutils.Logging;
-import com.gianlu.commonutils.Preferences.Prefs;
-import com.gianlu.commonutils.Toaster;
+import com.gianlu.commonutils.analytics.AnalyticsApplication;
+import com.gianlu.commonutils.dialogs.ActivityWithDialog;
+import com.gianlu.commonutils.logging.Logging;
+import com.gianlu.commonutils.misc.RecyclerMessageView;
+import com.gianlu.commonutils.permissions.AskPermission;
+import com.gianlu.commonutils.preferences.Prefs;
+import com.gianlu.commonutils.ui.Toaster;
 
 import java.io.File;
 import java.io.FileOutputStream;

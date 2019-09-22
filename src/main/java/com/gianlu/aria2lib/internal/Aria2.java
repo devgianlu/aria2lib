@@ -1,4 +1,4 @@
-package com.gianlu.aria2lib.Internal;
+package com.gianlu.aria2lib.internal;
 
 import android.annotation.SuppressLint;
 
@@ -7,9 +7,9 @@ import androidx.annotation.Nullable;
 
 import com.gianlu.aria2lib.Aria2PK;
 import com.gianlu.aria2lib.BadEnvironmentException;
-import com.gianlu.commonutils.Logging;
-import com.gianlu.commonutils.Preferences.Json.JsonStoring;
-import com.gianlu.commonutils.Preferences.Prefs;
+import com.gianlu.commonutils.logging.Logging;
+import com.gianlu.commonutils.preferences.Prefs;
+import com.gianlu.commonutils.preferences.json.JsonStoring;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -1,4 +1,4 @@
-package com.gianlu.aria2lib.Internal;
+package com.gianlu.aria2lib.internal;
 
 import androidx.annotation.NonNull;
 

@@ -8,13 +8,13 @@
 
     <application>
         <service
-            android:name=".Internal.Aria2Service"
+            android:name=".internal.Aria2Service"
             android:enabled="true" />
 
         <!-- Download aria2 binary activity -->
-        <activity android:name=".Interface.DownloadBinActivity" />
+        <activity android:name=".ui.DownloadBinActivity" />
 
         <!-- Custom options editor activity -->
-        <activity android:name="com.gianlu.aria2lib.Interface.ConfigEditorActivity" />
+        <activity android:name="com.gianlu.aria2lib.ui.ConfigEditorActivity" />
     </application>
 </manifest>
