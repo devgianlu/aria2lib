@@ -30,10 +30,10 @@ import com.gianlu.aria2lib.Aria2PK;
 import com.gianlu.aria2lib.BadEnvironmentException;
 import com.gianlu.aria2lib.BareConfigProvider;
 import com.gianlu.aria2lib.R;
-import com.gianlu.commonutils.Analytics.AnalyticsApplication;
 import com.gianlu.commonutils.CommonUtils;
-import com.gianlu.commonutils.Logging;
-import com.gianlu.commonutils.Preferences.Prefs;
+import com.gianlu.commonutils.analytics.AnalyticsApplication;
+import com.gianlu.commonutils.logging.Logging;
+import com.gianlu.commonutils.preferences.Prefs;
 
 import java.io.IOException;
 import java.io.Serializable;

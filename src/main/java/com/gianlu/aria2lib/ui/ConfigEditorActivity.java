@@ -18,11 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gianlu.aria2lib.Aria2PK;
 import com.gianlu.aria2lib.R;
-import com.gianlu.commonutils.CasualViews.RecyclerMessageView;
 import com.gianlu.commonutils.CommonUtils;
-import com.gianlu.commonutils.Dialogs.ActivityWithDialog;
-import com.gianlu.commonutils.Preferences.Json.JsonStoring;
-import com.gianlu.commonutils.Toaster;
+import com.gianlu.commonutils.dialogs.ActivityWithDialog;
+import com.gianlu.commonutils.misc.RecyclerMessageView;
+import com.gianlu.commonutils.preferences.json.JsonStoring;
+import com.gianlu.commonutils.ui.Toaster;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 

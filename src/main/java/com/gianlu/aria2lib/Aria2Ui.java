@@ -18,8 +18,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.gianlu.aria2lib.internal.Aria2;
 import com.gianlu.aria2lib.internal.Aria2Service;
 import com.gianlu.aria2lib.internal.Message;
-import com.gianlu.commonutils.Logging;
-import com.gianlu.commonutils.Preferences.Prefs;
+import com.gianlu.commonutils.logging.Logging;
+import com.gianlu.commonutils.preferences.Prefs;
 
 import java.io.File;
 import java.io.IOException;

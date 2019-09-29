@@ -2,10 +2,10 @@ package com.gianlu.aria2lib;
 
 import android.os.Environment;
 
-import com.gianlu.commonutils.CommonPK;
-import com.gianlu.commonutils.Preferences.Prefs;
+import com.gianlu.commonutils.preferences.CommonPK;
+import com.gianlu.commonutils.preferences.Prefs;
 
-public class Aria2PK extends CommonPK {
+public abstract class Aria2PK extends CommonPK {
     public static final Prefs.KeyWithDefault<Integer> NOTIFICATION_UPDATE_DELAY = new Prefs.KeyWithDefault<>("updateDelay", 1);
     public static final Prefs.KeyWithDefault<Boolean> SHOW_PERFORMANCE = new Prefs.KeyWithDefault<>("showPerformance", true);
     public static final Prefs.Key ENV_LOCATION = new Prefs.Key("envLocation");

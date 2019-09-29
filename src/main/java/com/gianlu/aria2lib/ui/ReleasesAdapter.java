@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gianlu.aria2lib.GitHubApi;
 import com.gianlu.aria2lib.R;
-import com.gianlu.commonutils.CasualViews.SuperTextView;
 import com.gianlu.commonutils.CommonUtils;
+import com.gianlu.commonutils.misc.SuperTextView;
 
 import java.util.ArrayList;
 import java.util.Date;
