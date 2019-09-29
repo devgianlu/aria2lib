@@ -90,7 +90,7 @@ public final class Aria2 {
     }
 
     public boolean hasEnv() {
-        return env != null;
+        return env != null && env.exec.exists();
     }
 
     @NonNull

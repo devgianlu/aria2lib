@@ -3,6 +3,12 @@ package com.gianlu.aria2lib;
 import android.os.Handler;
 import android.os.Looper;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
+
+import com.gianlu.commonutils.Logging;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,10 +18,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
 
 /**
  * Workflow:
@@ -68,10 +70,14 @@ public final class Aria2Downloader {
                     if (filter != null && !filter.accept(entry, name))
                         continue;
 
-                    try (FileOutputStream out = new FileOutputStream(new File(dest, name))) {
+                    File file = new File(dest, name);
+                    try (FileOutputStream out = new FileOutputStream(file)) {
                         while ((read = in.read(buffer)) != -1)
                             out.write(buffer, 0, read);
                     }
+
+                    if (!file.setExecutable(true))
+                        Logging.log("Failed setting execute permission on " + file, true);
 
                     in.closeEntry();
                 }

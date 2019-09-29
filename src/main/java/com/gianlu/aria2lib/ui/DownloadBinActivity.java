@@ -21,11 +21,11 @@ import com.gianlu.aria2lib.GitHubApi;
 import com.gianlu.aria2lib.R;
 import com.gianlu.commonutils.Analytics.AnalyticsApplication;
 import com.gianlu.commonutils.AskPermission;
-import com.gianlu.commonutils.CasualViews.RecyclerMessageView;
 import com.gianlu.commonutils.Dialogs.ActivityWithDialog;
 import com.gianlu.commonutils.Logging;
 import com.gianlu.commonutils.Preferences.Prefs;
 import com.gianlu.commonutils.Toaster;
+import com.gianlu.commonutils.misc.RecyclerMessageView;
 
 import java.io.File;
 import java.io.FileOutputStream;
