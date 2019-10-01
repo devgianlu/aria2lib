@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 
-import com.gianlu.commonutils.Logging;
+import com.gianlu.commonutils.logging.Logging;
 
 import java.io.File;
 import java.io.FileInputStream;
