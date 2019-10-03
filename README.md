@@ -1,6 +1,6 @@
 # aria2lib
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1ea29f828e684589896164e105e1a66b)](https://www.codacy.com/manual/devgianlu/aria2lib?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=devgianlu/aria2lib&amp;utm_campaign=Badge_Grade)
-[![Translate - with Stringlate](https://img.shields.io/badge/translate%20with-stringlate-green.svg)](https://lonamiwebs.github.io/stringlate/translate?git=https%3A%2F%2Fgithub.com%2Fdevgianlu%2Faria2lib)
+[![Crowdin](https://badges.crowdin.net/aria2lib/localized.svg)](https://crowdin.com/project/aria2lib)
 
 This is a small module (Android library only) that allows to download and manage an [aria2](https://github.com/aria2/aria2) executable. It is used in [Aria2Android](https://github.com/devgianlu/Aria2Android) and [Aria2App](https://github.com/devgianlu/Aria2App).
 
