@@ -62,6 +62,8 @@
     <string name="failedLoadingOptions">加载自定义选项失败!</string>
     <string name="delete">删除</string>
     <string name="edit">编辑</string>
+    <string name="source"><![CDATA[<b>Source:</b>]]> %s</string>
+    <string name="noSupportedBinaries">There are no supported binaries for your device. You can compile one yourself and imported if you like.</string>
     <plurals name="customOptions_summary">
         <item quantity="other">您有%d个自定义选项。</item>
     </plurals>
