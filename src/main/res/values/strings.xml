@@ -62,6 +62,8 @@
     <string name="failedLoadingOptions">Failed loading custom options!</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
+    <string name="source"><![CDATA[<b>Source:</b>]]> %s</string>
+    <string name="noSupportedBinaries">There are no supported binaries for your device. You can compile one yourself and imported if you like.</string>
     <plurals name="customOptions_summary">
         <item quantity="zero">You have no custom options.</item>
         <item quantity="one">You have one custom option.</item>

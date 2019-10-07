@@ -1,7 +1,13 @@
 package com.gianlu.aria2lib;
 
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
+import androidx.annotation.WorkerThread;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,14 +22,12 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.UiThread;
-import androidx.annotation.WorkerThread;
 
 public final class GitHubApi {
     private static GitHubApi instance;
@@ -93,7 +97,7 @@ public final class GitHubApi {
                 JSONArray array = new JSONArray(read(in));
                 final List<Release> releases = new ArrayList<>();
                 for (int i = 0; i < array.length(); i++)
-                    releases.add(new Release(array.getJSONObject(i)));
+                    releases.add(new Release(array.getJSONObject(i), owner, repo));
 
                 handler.post(() -> listener.onResult(releases));
             }
@@ -109,7 +113,7 @@ public final class GitHubApi {
         inputStream("https://api.github.com/repos/" + owner + "/" + repo + "/releases/" + id, new InputStreamWorker() {
             @Override
             public void work(@NonNull InputStream in) throws Exception {
-                Release release = new Release(new JSONObject(read(in)));
+                Release release = new Release(new JSONObject(read(in)), owner, repo);
                 handler.post(() -> listener.onResult(release));
             }
 
@@ -118,6 +122,82 @@ public final class GitHubApi {
                 handler.post(() -> listener.onException(ex));
             }
         });
+    }
+
+    public enum Arch {
+        ARMEABI_V7A("armeabi-v7a"), ARM64_V8A("arm64-v8a"),
+        X86_64("x86_64"), X86("x86");
+
+        private String abi;
+
+        Arch(String abi) {
+            this.abi = abi;
+        }
+
+        @Nullable
+        public static Arch detect(@NonNull Release.Asset asset) {
+            if (asset.source() == ReleaseSource.ARIA2_ORIGINAL) {
+                if (asset.name.contains("arm")) return ARMEABI_V7A;
+                else if (asset.name.contains("aarch64")) return ARM64_V8A;
+                else return null;
+            }
+
+            for (Arch arch : values())
+                if (asset.name.contains(arch.abi))
+                    return arch;
+
+            return null;
+        }
+    }
+
+    public enum ReleaseSource {
+        ARIA2_ORIGINAL, ARIA2_DEVGIANLU;
+
+        private static void pickAssetsForOriginal(Release release, List<Release.Asset> assets) {
+            for (String abi : Build.SUPPORTED_ABIS) {
+                if (!Objects.equals(abi, "arm64-v8a") && !Objects.equals(abi, "armeabi-v7a"))
+                    continue;
+
+                for (Release.Asset asset : release.assets) {
+                    if (!asset.name.contains("android")) continue;
+
+                    if (Objects.equals(abi, "arm64-v8a") && asset.name.contains("aarch64")) {
+                        if (Build.VERSION.SDK_INT >= 29) assets.add(asset);
+                    } else if (Objects.equals(abi, "armeabi-v7a") && asset.name.contains("arm")) {
+                        assets.add(asset);
+                    }
+                }
+            }
+        }
+
+        private static void pickAssetsForDevgianlu(Release release, List<Release.Asset> assets) {
+            for (String abi : Build.SUPPORTED_ABIS) {
+                if (abi.equals("armeabi")) continue;
+
+                for (Release.Asset asset : release.assets) {
+                    if (asset.name.contains(abi)) {
+                        if (abi.equals("x86")) {
+                            if (!asset.name.contains("x86_64"))
+                                assets.add(asset);
+                        } else {
+                            assets.add(asset);
+                        }
+                    }
+                }
+            }
+        }
+
+        @NonNull
+        public String slug() {
+            switch (this) {
+                case ARIA2_ORIGINAL:
+                    return "aria2/aria2";
+                case ARIA2_DEVGIANLU:
+                    return "devgianlu/aria2-android";
+                default:
+                    throw new IllegalArgumentException(String.valueOf(this));
+            }
+        }
     }
 
     @WorkerThread
@@ -136,38 +216,107 @@ public final class GitHubApi {
 
     public static class Release {
         public final int id;
-        public final String name;
-        public final String htmlUrl;
-        public final long publishedAt;
-        public Asset androidAsset;
+        final long publishedAt;
+        final ReleaseSource source;
+        final List<Asset> assets;
+        final String name;
+        final String htmlUrl;
 
-        Release(JSONObject obj) throws JSONException, ParseException {
+        Release(JSONObject obj, String owner, String repo) throws JSONException, ParseException {
             id = obj.getInt("id");
             name = obj.getString("name");
             htmlUrl = obj.getString("html_url");
             publishedAt = getDateParser().parse(obj.getString("published_at")).getTime();
 
-            JSONArray assets = obj.getJSONArray("assets");
-            for (int i = 0; i < assets.length(); i++) {
-                JSONObject asset = assets.getJSONObject(i);
-                if (asset.optString("name", "").contains("android")) {
-                    androidAsset = new Asset(asset);
+            if (owner.equals("aria2") && repo.equals("aria2"))
+                source = ReleaseSource.ARIA2_ORIGINAL;
+            else if (owner.equals("devgianlu") && repo.equals("aria2-android"))
+                source = ReleaseSource.ARIA2_DEVGIANLU;
+            else
+                throw new IllegalArgumentException(owner + "/" + repo);
+
+            JSONArray assetsArray = obj.getJSONArray("assets");
+            assets = new ArrayList<>(assetsArray.length());
+            for (int i = 0; i < assetsArray.length(); i++)
+                assets.add(new Asset(assetsArray.getJSONObject(i), this));
+        }
+
+        private static void getAllSupportedAssets(@NonNull Release release, List<Asset> assets) {
+            switch (release.source) {
+                case ARIA2_ORIGINAL:
+                    ReleaseSource.pickAssetsForOriginal(release, assets);
                     break;
+                case ARIA2_DEVGIANLU:
+                    ReleaseSource.pickAssetsForDevgianlu(release, assets);
+                    break;
+                default:
+                    throw new IllegalArgumentException(String.valueOf(release.source));
+            }
+        }
+
+        @NonNull
+        public static List<Asset> getAllSupportedAssets(List<Release> releases) {
+            List<Asset> assets = new ArrayList<>();
+            for (Release release : releases) getAllSupportedAssets(release, assets);
+            return assets;
+        }
+
+        @NonNull
+        public String version() {
+            String[] split = name.split(" ");
+            return split.length == 1 ? split[0] : split[1];
+        }
+
+        public static class SortByVersionComparator implements Comparator<Asset> {
+            @Override
+            public int compare(Asset o1, Asset o2) {
+                try {
+                    return Integer.parseInt(o1.version().replace("\\.", ""))
+                            - Integer.parseInt(o2.version().replace("\\.", ""));
+                } catch (Exception ex) {
+                    return 0;
                 }
             }
         }
 
         public static class Asset {
             public final int id;
-            public final String name;
             public final String downloadUrl;
             public final long size;
+            private final String name;
+            private final Release release;
 
-            Asset(JSONObject obj) throws JSONException {
-                id = obj.getInt("id");
-                name = obj.getString("name");
-                downloadUrl = obj.getString("browser_download_url");
-                size = obj.getLong("size");
+            Asset(JSONObject obj, Release release) throws JSONException {
+                this.id = obj.getInt("id");
+                this.name = obj.getString("name");
+                this.downloadUrl = obj.getString("browser_download_url");
+                this.size = obj.getLong("size");
+                this.release = release;
+            }
+
+            @NonNull
+            public String version() {
+                return release.version();
+            }
+
+            @NonNull
+            public String repoSlug() {
+                return release.source.slug();
+            }
+
+            public long publishedAt() {
+                return release.publishedAt;
+            }
+
+            @NonNull
+            public String arch() {
+                Arch arch = Arch.detect(this);
+                return arch == null ? "unknown" : arch.abi;
+            }
+
+            @NonNull
+            public ReleaseSource source() {
+                return release.source;
             }
         }
     }

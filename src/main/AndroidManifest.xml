@@ -12,9 +12,13 @@
             android:enabled="true" />
 
         <!-- Download aria2 binary activity -->
-        <activity android:name=".ui.DownloadBinActivity" />
+        <activity
+            android:name=".ui.DownloadBinActivity"
+            android:theme="@style/AppTheme" />
 
         <!-- Custom options editor activity -->
-        <activity android:name="com.gianlu.aria2lib.ui.ConfigEditorActivity" />
+        <activity
+            android:name="com.gianlu.aria2lib.ui.ConfigEditorActivity"
+            android:theme="@style/AppTheme" />
     </application>
 </manifest>

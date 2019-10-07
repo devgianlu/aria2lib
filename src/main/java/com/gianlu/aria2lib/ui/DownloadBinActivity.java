@@ -33,7 +33,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-public class DownloadBinActivity extends ActivityWithDialog implements ReleasesAdapter.Listener, GitHubApi.OnResult<List<GitHubApi.Release>>, Aria2Downloader.DownloadRelease, Aria2Downloader.ExtractTo {
+public class DownloadBinActivity extends ActivityWithDialog implements ReleasesAdapter.Listener, GitHubApi.OnResult<List<GitHubApi.Release>>, Aria2Downloader.OnDownloadAsset, Aria2Downloader.ExtractTo {
     public static final String ACTION_IMPORT_BIN = "imported_bin";
     private static final int IMPORT_BIN_CODE = 8;
     private RecyclerMessageView rmv;
@@ -60,6 +60,7 @@ public class DownloadBinActivity extends ActivityWithDialog implements ReleasesA
 
         rmv = new RecyclerMessageView(this);
         rmv.linearLayoutManager(RecyclerView.VERTICAL, false);
+        rmv.dividerDecoration(RecyclerView.VERTICAL);
         setContentView(rmv);
         setTitle(getIntent().getStringExtra("title"));
 
@@ -152,7 +153,9 @@ public class DownloadBinActivity extends ActivityWithDialog implements ReleasesA
 
     @Override
     public void onResult(@NonNull List<GitHubApi.Release> result) {
-        rmv.loadListData(new ReleasesAdapter(this, result, this));
+        List<GitHubApi.Release.Asset> assets = GitHubApi.Release.getAllSupportedAssets(result);
+        if (assets.isEmpty()) rmv.showInfo(R.string.noSupportedBinaries);
+        else rmv.loadListData(new ReleasesAdapter(this, assets, this));
     }
 
     @Override
@@ -162,11 +165,11 @@ public class DownloadBinActivity extends ActivityWithDialog implements ReleasesA
     }
 
     @Override
-    public void onReleaseSelected(@NonNull GitHubApi.Release release) {
+    public void onAssetSelected(@NonNull GitHubApi.Release.Asset asset) {
         rmv.showInfo(R.string.downloadingBin);
 
-        downloader.setRelease(release);
-        downloader.downloadRelease(this);
+        downloader.setAsset(asset);
+        downloader.downloadAsset(this);
     }
 
     @Override
