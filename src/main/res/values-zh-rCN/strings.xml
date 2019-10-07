@@ -23,7 +23,7 @@
     <string name="rpcToken">RPC令牌</string>
     <string name="outputPath">输出路径</string>
     <string name="outputPath_summary">您下载的文件将会放置到此处。</string>
-    <string name="general">通用</string>
+    <string name="general">一般</string>
     <string name="clearLogs">清除日志</string>
     <string name="saveSession">保存会话</string>
     <string name="saveSession_summary">定期保存下载任务信息，以便在服务停止时不会丢失它们。</string>
@@ -34,7 +34,7 @@
     <string name="accessControlAllowOriginAll_summary">设置<b>Access-Control-Allow-Origin</b>报头为<b>*</b>。请仅当您在使用外部设备连接时启用该选项。</string>
     <string name="notification">通知</string>
     <string name="showPerformance">显示性能</string>
-    <string name="showPerformance_summary">服务运行时在系统通知栏增加固定显示。</string>
+    <string name="showPerformance_summary">当服务运行时显示一个持续的通知。</string>
     <string name="updateInterval">更新间隔（秒）</string>
     <string name="noOpenTree">找不到处理此操作的应用程序。请手动输入路径。</string>
     <string name="invalidPort">此端口无效!</string>
