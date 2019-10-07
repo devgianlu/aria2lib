@@ -177,7 +177,9 @@ public class DownloadBinActivity extends ActivityWithDialog implements ReleasesA
 
     @NonNull
     private File getEnvDir() {
-        return new File(getFilesDir(), "env");
+        File env = new File(getFilesDir(), "env");
+        if (!env.exists()) env.mkdir();
+        return env;
     }
 
     @Override
