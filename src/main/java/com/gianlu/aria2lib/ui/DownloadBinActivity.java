@@ -117,11 +117,16 @@ public class DownloadBinActivity extends ActivityWithDialog implements ReleasesA
     public void writeStreamAsBin(@Nullable InputStream in) throws IOException {
         if (in == null) throw new IOException(new NullPointerException("InputStream is null!"));
 
+        File bin = new File(getEnvDir(), "aria2c");
+
         int count;
         byte[] buffer = new byte[4096];
-        try (FileOutputStream out = new FileOutputStream(new File(getFilesDir(), "aria2c"))) {
+        try (FileOutputStream out = new FileOutputStream(bin)) {
             while ((count = in.read(buffer)) != -1) out.write(buffer, 0, count);
         }
+
+        if (!bin.setExecutable(true))
+            throw new IOException("Cannot make bin executable!");
     }
 
     @Override
