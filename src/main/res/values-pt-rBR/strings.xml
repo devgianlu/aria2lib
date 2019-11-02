@@ -58,14 +58,14 @@
     <string name="done">Feito</string>
     <string name="failedSavingCustomOptions">Falha ao salvar opções personalizadas!</string>
     <string name="updatedApp_importedConfig">Arquivo de configuração importado</string>
-    <string name="updatedApp_importedConfig_message">This version of the app introduced a new feature: the custom options editor. Your config file has been imported here.</string>
-    <string name="failedLoadingOptions">Failed loading custom options!</string>
-    <string name="delete">Delete</string>
-    <string name="edit">Edit</string>
-    <string name="source"><![CDATA[<b>Source:</b>]]> %s</string>
-    <string name="noSupportedBinaries">There are no supported binaries for your device. You can compile one yourself and imported if you like.</string>
+    <string name="updatedApp_importedConfig_message">Esta versão do aplicativo introduziu um novo recurso: o editor de opções personalizadas. Seu arquivo de configuração foi importado aqui.</string>
+    <string name="failedLoadingOptions">Falha ao carregar opções personalizadas!</string>
+    <string name="delete">Excluir</string>
+    <string name="edit">Editar</string>
+    <string name="source"><![CDATA[<b>Fonte:</b>]]> %s</string>
+    <string name="noSupportedBinaries">Não há binários suportados para o seu dispositivo. Você pode compilar um você mesmo e importá-lo se quiser.</string>
     <plurals name="customOptions_summary">
-        <item quantity="one">You have one custom option.</item>
-        <item quantity="other">You have %d custom options.</item>
+        <item quantity="one">Você não tem nenhum filtro personalizado.</item>
+        <item quantity="other">Você tem %d opções personalizadas.</item>
     </plurals>
 </resources>
