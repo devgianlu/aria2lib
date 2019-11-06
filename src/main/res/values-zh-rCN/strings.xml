@@ -30,7 +30,7 @@
     <string name="startServiceAtBoot">随系统启动开始服务</string>
     <string name="startServiceAtBoot_summary">设备启动后服务自动开始。</string>
     <string name="customOptions">自定义选项</string>
-    <string name="accessControlAllowOriginAll">Access Control Allow Origin all</string>
+    <string name="accessControlAllowOriginAll">访问控制允许所有来源</string>
     <string name="accessControlAllowOriginAll_summary">设置<b>Access-Control-Allow-Origin</b>报头为<b>*</b>。请仅当您在使用外部设备连接时启用该选项。</string>
     <string name="notification">通知</string>
     <string name="showPerformance">显示性能</string>
