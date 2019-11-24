@@ -41,5 +41,5 @@ dependencies {
     api 'com.github.devgianlu.MaterialPreferences:lovelyinput:b0d322a322'
 
     api 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
-    api 'com.google.android.material:material:1.2.0-alpha01'
+    api 'com.google.android.material:material:1.2.0-alpha02'
 }
