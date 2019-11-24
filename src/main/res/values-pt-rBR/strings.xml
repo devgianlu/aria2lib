@@ -65,7 +65,7 @@
     <string name="source"><![CDATA[<b>Fonte:</b>]]> %s</string>
     <string name="noSupportedBinaries">Não há binários suportados para o seu dispositivo. Você pode compilar um você mesmo e importá-lo se quiser.</string>
     <plurals name="customOptions_summary">
-        <item quantity="one">Você não tem nenhum filtro personalizado.</item>
+        <item quantity="one">Você tem uma opção personalizada.</item>
         <item quantity="other">Você tem %d opções personalizadas.</item>
     </plurals>
 </resources>
