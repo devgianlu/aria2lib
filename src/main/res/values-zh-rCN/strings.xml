@@ -30,7 +30,7 @@
     <string name="startServiceAtBoot">随系统启动开始服务</string>
     <string name="startServiceAtBoot_summary">设备启动后服务自动开始。</string>
     <string name="customOptions">自定义选项</string>
-    <string name="accessControlAllowOriginAll">Access Control Allow Origin all</string>
+    <string name="accessControlAllowOriginAll">访问控制允许所有来源</string>
     <string name="accessControlAllowOriginAll_summary">设置<b>Access-Control-Allow-Origin</b>报头为<b>*</b>。请仅当您在使用外部设备连接时启用该选项。</string>
     <string name="notification">通知</string>
     <string name="showPerformance">显示性能</string>
@@ -62,7 +62,7 @@
     <string name="failedLoadingOptions">加载自定义选项失败!</string>
     <string name="delete">删除</string>
     <string name="edit">编辑</string>
-    <string name="source"><![CDATA[<b>Source:</b>]]> %s</string>
+    <string name="source"><![CDATA[<b>来源:</b>]]> %s</string>
     <string name="noSupportedBinaries">没有支持您的设备的二进制文件。如果您愿意，可以自行编译并导入。</string>
     <plurals name="customOptions_summary">
         <item quantity="other">您有%d个自定义选项。</item>
