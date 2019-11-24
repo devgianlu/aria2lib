@@ -34,7 +34,7 @@ android {
 
 dependencies {
     implementation(project(':CommonUtils')) {
-        exclude group: 'com.getkeepsafe.taptargetview'
+        exclude group: 'me.toptas.fancyshowcase'
     }
 
     api 'com.github.devgianlu.MaterialPreferences:library:b0d322a322'
