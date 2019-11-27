@@ -36,7 +36,7 @@ public class Aria2Ui {
     private final Listener listener;
     private final LocalBroadcastManager broadcastManager;
     private final List<LogMessage> messages = new ArrayList<>(MAX_LOG_LINES);
-    private ServiceBroadcastReceiver receiver;
+    private final ServiceBroadcastReceiver receiver;
     private Messenger messenger;
     private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override

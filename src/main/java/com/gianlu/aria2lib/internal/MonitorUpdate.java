@@ -40,7 +40,6 @@ public final class MonitorUpdate implements Serializable {
         }
     }
 
-    @NonNull
     public int pid() {
         return pid;
     }
@@ -50,7 +49,6 @@ public final class MonitorUpdate implements Serializable {
         return cpu;
     }
 
-    @NonNull
     public int rss() {
         return rss;
     }

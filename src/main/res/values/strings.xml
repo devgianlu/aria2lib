@@ -1,27 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="publishedAt"><![CDATA[<b>Published at:</b>]]> %s</string>
-    <string name="size"><![CDATA[<b>Size:</b>]]> %s</string>
-    <string name="failedImportingBin">Failed importing the bin file!</string>
-    <string name="importBin">Import bin</string>
-    <string name="customBin_message">You can import your own aria2 compiled binary. The binary must be compiled for your device architecture and the application behaviour is not guaranteed. The file will be copied, to update you\'ll need to repeat this procedure. Do you really want to import your own bin file?</string>
-    <string name="readPermission">Read permission requested</string>
-    <string name="readStorage_message">The application needs the read permission in order to import the bin file.</string>
-    <string name="readPermissionDenied">You denied the read permission!</string>
-    <string name="customBin">Custom bin file</string>
     <string name="yes">Yes</string>
     <string name="stopService">Stop service</string>
     <string name="no">No</string>
-    <string name="retrievingReleases">Retrieving releases. Please wait…</string>
-    <string name="failedRetrievingReleases_reason">Failed retrieving releases: %s</string>
-    <string name="downloadingBin">Downloading the bin files…</string>
-    <string name="binExtracted">Bin extracted successfully!</string>
-    <string name="extractingBin">Extracting the bin files…</string>
-    <string name="downloadBin">Download bin</string>
     <string name="rpcPort">RPC port</string>
     <string name="rpcToken">RPC token</string>
     <string name="outputPath">Output path</string>
-    <string name="outputPath_summary">Your downloads will end up there.</string>
     <string name="general">General</string>
     <string name="clearLogs">Clear logs</string>
     <string name="saveSession">Save session</string>
@@ -42,10 +26,8 @@
     <string name="invalidOutputPath">The output path is either missing or not writable!</string>
     <string name="logTerminated">Terminated with exit code %d.</string>
     <string name="logStarted">Started: %s</string>
-    <string name="add">Add</string>
     <string name="newValue">New value</string>
     <string name="apply">Apply</string>
-    <string name="currentValue"><![CDATA[<b>Current value:</b>]]> %s</string>
     <string name="key">Key</string>
     <string name="value">Value</string>
     <string name="newOption">New option</string>
@@ -62,8 +44,6 @@
     <string name="failedLoadingOptions">Failed loading custom options!</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
-    <string name="source"><![CDATA[<b>Source:</b>]]> %s</string>
-    <string name="noSupportedBinaries">There are no supported binaries for your device. You can compile one yourself and imported if you like.</string>
     <plurals name="customOptions_summary">
         <item quantity="zero">You have no custom options.</item>
         <item quantity="one">You have one custom option.</item>
