@@ -15,7 +15,7 @@
     <string name="startServiceAtBoot_summary">在裝置開啟時打開服務。</string>
     <string name="customOptions">自訂設定</string>
     <string name="accessControlAllowOriginAll">啟用 Access-Control-Allow-Origin</string>
-    <string name="accessControlAllowOriginAll_summary">設定 Access-Control-Allow-Origin Header 為 *。只有在使用外部裝置時才啟用此項。</string>
+    <string name="accessControlAllowOriginAll_summary">設定 <b>Access-Control-Allow-Origin</b> header 為 <b>*</b>。只有在使用外部裝置時才啟用此項。</string>
     <string name="notification">通知</string>
     <string name="showPerformance">顯示效能</string>
     <string name="showPerformance_summary">在服務運行時持續顯示通知。</string>

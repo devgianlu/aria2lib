@@ -45,7 +45,7 @@
     <string name="delete">Excluir</string>
     <string name="edit">Editar</string>
     <plurals name="customOptions_summary">
-        <item quantity="one">Você não tem nenhum filtro personalizado.</item>
+        <item quantity="one">Você tem %d opções personalizadas.</item>
         <item quantity="other">Você tem %d opções personalizadas.</item>
     </plurals>
 </resources>
