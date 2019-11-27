@@ -81,6 +81,29 @@ public final class Aria2 {
         return false;
     }
 
+    void logDebugInfo() {
+        if (env == null) {
+            Logging.log("Cannot retrieve debug info without environment.", false);
+            return;
+        }
+
+        try {
+            Process process = Runtime.getRuntime().exec("ls -al " + env.baseDir.getAbsolutePath());
+            process.waitFor();
+
+            StringBuilder result = new StringBuilder();
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null)
+                    result.append(line).append('\n');
+            }
+
+            Logging.log(result.toString(), false);
+        } catch (IOException | InterruptedException ex) {
+            Logging.log("Failed retrieving debug info.", ex);
+        }
+    }
+
     void addListener(@NonNull MessageListener listener) {
         messageHandler.listeners.add(listener);
     }
