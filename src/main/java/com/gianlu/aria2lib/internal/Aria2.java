@@ -120,11 +120,7 @@ public final class Aria2 {
         return process;
     }
 
-    public void loadEnv(@NonNull File env, @NonNull File session) throws BadEnvironmentException {
-        if (!env.isDirectory())
-            throw new BadEnvironmentException(env.getAbsolutePath() + " is not a directory!");
-
-        File exec = new File(env, "aria2c");
+    public void loadEnv(@NonNull File exec, @NonNull File session) throws BadEnvironmentException {
         if (!exec.exists())
             throw new BadEnvironmentException(exec.getAbsolutePath() + " doesn't exists!");
 
@@ -143,7 +139,7 @@ public final class Aria2 {
             }
         }
 
-        this.env = new Env(env, exec, session);
+        this.env = new Env(exec, session);
     }
 
     boolean start() throws BadEnvironmentException, IOException {
@@ -178,7 +174,7 @@ public final class Aria2 {
         if (env == null)
             throw new BadEnvironmentException("Missing environment!");
 
-        loadEnv(env.baseDir, env.session);
+        loadEnv(env.exec, env.session);
     }
 
     private void processTerminated(int code) {
@@ -285,13 +281,11 @@ public final class Aria2 {
     }
 
     private static class Env {
-        private final File baseDir;
         private final File exec;
         private final File session;
         private final Map<String, String> params;
 
-        Env(@NonNull File baseDir, @NonNull File exec, @NonNull File session) {
-            this.baseDir = baseDir;
+        Env(@NonNull File exec, @NonNull File session) {
             this.exec = exec;
             this.session = session;
             this.params = new HashMap<>();
@@ -356,10 +350,7 @@ public final class Aria2 {
         }
 
         boolean delete() {
-            boolean fine = true;
-            for (File file : baseDir.listFiles())
-                if (!file.delete()) fine = false;
-            return fine;
+            return session.delete();
         }
     }
 

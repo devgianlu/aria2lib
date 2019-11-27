@@ -97,16 +97,9 @@ public class Aria2Ui {
         }
     }
 
-    public void loadEnv() throws BadEnvironmentException {
-        String envPath = Prefs.getString(Aria2PK.ENV_LOCATION, null);
-        if (envPath == null || envPath.isEmpty())
-            throw new BadEnvironmentException("Environment path not set!");
-
-        File file = new File(envPath);
-        if (!file.exists())
-            throw new BadEnvironmentException("Environment path is invalid!");
-
-        aria2.loadEnv(file, new File(context.getFilesDir(), "session"));
+    public void loadEnv(@NonNull Context context) throws BadEnvironmentException {
+        aria2.loadEnv(new File(context.getApplicationInfo().nativeLibraryDir, "libaria2c.so"),
+                new File(context.getFilesDir(), "session"));
     }
 
     @NonNull
