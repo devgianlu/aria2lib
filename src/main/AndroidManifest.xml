@@ -12,9 +12,6 @@
             android:enabled="true" />
 
         <!-- Download aria2 binary activity -->
-        <activity
-            android:name=".ui.DownloadBinActivity"
-            android:theme="@style/AppTheme" />
 
         <!-- Custom options editor activity -->
         <activity

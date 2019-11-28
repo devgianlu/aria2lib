@@ -19,7 +19,6 @@ import androidx.core.content.ContextCompat;
 import com.gianlu.aria2lib.Aria2PK;
 import com.gianlu.aria2lib.Aria2Ui;
 import com.gianlu.aria2lib.R;
-import com.gianlu.commonutils.misc.MessageView;
 import com.gianlu.commonutils.logging.Logging;
 import com.gianlu.commonutils.misc.MessageView;
 import com.gianlu.commonutils.preferences.Prefs;
