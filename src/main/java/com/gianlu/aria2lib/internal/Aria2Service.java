@@ -131,8 +131,6 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
         try {
             aria2Version = aria2.version();
         } catch (BadEnvironmentException | IOException ex) {
-            aria2.logDebugInfo();
-
             Logging.log(ex);
             aria2Version = "aria2 version [unknown]";
         }
@@ -178,7 +176,6 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
                         start();
                         return flags == 1 ? START_STICKY : START_REDELIVER_INTENT;
                     } catch (IOException | BadEnvironmentException exx) {
-                        aria2.logDebugInfo();
                         Logging.log(exx);
                     }
                 }
