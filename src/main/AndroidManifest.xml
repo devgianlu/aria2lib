@@ -6,14 +6,11 @@
     <!-- Foreground service on Android P+ -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
-    <application>
+    <application android:requestLegacyExternalStorage="true">
         <service
             android:name=".internal.Aria2Service"
             android:enabled="true" />
 
-        <!-- Download aria2 binary activity -->
-
-        <!-- Custom options editor activity -->
         <activity
             android:name="com.gianlu.aria2lib.ui.ConfigEditorActivity"
             android:theme="@style/AppTheme" />
