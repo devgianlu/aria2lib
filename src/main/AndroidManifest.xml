@@ -13,6 +13,6 @@
 
         <activity
             android:name="com.gianlu.aria2lib.ui.ConfigEditorActivity"
-            android:theme="@style/AppTheme" />
+            android:configChanges="uiMode" />
     </application>
 </manifest>
