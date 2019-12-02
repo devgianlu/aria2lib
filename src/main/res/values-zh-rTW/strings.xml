@@ -44,6 +44,8 @@
     <string name="failedLoadingOptions">載入自訂設定失敗!</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
+    <string name="startServiceWithApp">Start service then the app opens</string>
+    <string name="startServiceWithApp_summary">The service will start when the app is opened.</string>
     <plurals name="customOptions_summary">
         <item quantity="other">You have %d custom options.</item>
     </plurals>
