@@ -44,6 +44,8 @@
     <string name="failedLoadingOptions">加载自定义选项失败!</string>
     <string name="delete">删除</string>
     <string name="edit">编辑</string>
+    <string name="startServiceWithApp">Start service then the app opens</string>
+    <string name="startServiceWithApp_summary">The service will start when the app is opened.</string>
     <plurals name="customOptions_summary">
         <item quantity="other">您有%d个自定义选项。</item>
     </plurals>
