@@ -83,7 +83,7 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
         customOptions.setSummary(getResources().getQuantityString(R.plurals.customOptions_summary, customOptionsNum, customOptionsNum));
     }
 
-    public void setup(@NonNull AbsMaterialPreference.OverrideOnClickListener outputPathListener, @Nullable Prefs.KeyWithDefault<Boolean> startAtBootPref, boolean rpcEnabled) {
+    public void setup(@NonNull AbsMaterialPreference.OverrideOnClickListener outputPathListener, @Nullable Prefs.KeyWithDefault<Boolean> startAtBootPref, @Nullable Prefs.KeyWithDefault<Boolean> startWithAppPref, boolean rpcEnabled) {
         this.rpcEnabled = rpcEnabled;
 
         MaterialPreferences.instance().setUserInputModule(new LovelyInput.Builder()
@@ -136,6 +136,16 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
             startAtBoot.setTitle(R.string.startServiceAtBoot);
             startAtBoot.setSummary(R.string.startServiceAtBoot_summary);
             generalCategory.addView(startAtBoot);
+        }
+
+        if (startWithAppPref != null) {
+            MaterialCheckboxPreference startWithApp = new MaterialCheckboxPreference.Builder(getContext())
+                    .key(startWithAppPref.key())
+                    .defaultValue(startWithAppPref.fallback())
+                    .build();
+            startWithApp.setTitle(R.string.startServiceWithApp);
+            startWithApp.setSummary(R.string.startServiceWithApp_summary);
+            generalCategory.addView(startWithApp);
         }
 
         customOptions = new MaterialStandardPreference(getContext());
