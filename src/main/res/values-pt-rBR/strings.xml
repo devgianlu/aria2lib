@@ -45,7 +45,7 @@
     <string name="delete">Excluir</string>
     <string name="edit">Editar</string>
     <string name="startServiceWithApp">Iniciar o serviço quando o aplicativo for aberto</string>
-    <string name="startServiceWithApp_summary">O serviço iniciará quando o app for aberto.</string>
+    <string name="startServiceWithApp_summary">O serviço será iniciado quando o aplicativo for aberto.</string>
     <plurals name="customOptions_summary">
         <item quantity="one">Você tem %d opções personalizadas.</item>
         <item quantity="other">Você tem %d opções personalizadas.</item>
