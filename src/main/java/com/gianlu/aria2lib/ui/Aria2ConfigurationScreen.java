@@ -62,6 +62,7 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
 
     public Aria2ConfigurationScreen(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        useLinearLayout();
 
         inflate(new ContextThemeWrapper(context, R.style.AppTheme), R.layout.aria2lib_conf_screen, this);
 
