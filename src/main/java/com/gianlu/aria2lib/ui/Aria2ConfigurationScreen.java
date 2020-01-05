@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StyleRes;
 import androidx.core.content.ContextCompat;
 
 import com.gianlu.aria2lib.Aria2PK;
@@ -83,10 +84,10 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
         customOptions.setSummary(getResources().getQuantityString(R.plurals.customOptions_summary, customOptionsNum, customOptionsNum));
     }
 
-    public void setup(@NonNull AbsMaterialPreference.OverrideOnClickListener outputPathListener, @Nullable Prefs.KeyWithDefault<Boolean> startAtBootPref, @Nullable Prefs.KeyWithDefault<Boolean> startWithAppPref, boolean rpcEnabled) {
+    public void setup(@StyleRes int theme, @NonNull AbsMaterialPreference.OverrideOnClickListener outputPathListener, @Nullable Prefs.KeyWithDefault<Boolean> startAtBootPref, @Nullable Prefs.KeyWithDefault<Boolean> startWithAppPref, boolean rpcEnabled) {
         this.rpcEnabled = rpcEnabled;
 
-        MaterialPreferences.instance().setUserInputModule(new LovelyInput.Builder()
+        LovelyInput.Builder lovelyInput = new LovelyInput.Builder()
                 .addIcon(Aria2PK.OUTPUT_DIRECTORY.key(), R.drawable.baseline_folder_24)
                 .addTextFilter(Aria2PK.OUTPUT_DIRECTORY.key(), R.string.invalidOutputPath, text -> {
                     File path = new File(text);
@@ -105,8 +106,10 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
                 .addIcon(Aria2PK.RPC_TOKEN.key(), R.drawable.baseline_vpn_key_24)
                 .addTextFilter(Aria2PK.RPC_TOKEN.key(), R.string.invalidToken, text -> !text.isEmpty())
                 .addIcon(Aria2PK.NOTIFICATION_UPDATE_DELAY.key(), R.drawable.baseline_notifications_24)
-                .setTopColor(ContextCompat.getColor(getContext(), R.color.colorPrimary))
-                .build());
+                .setTopColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+
+        if (theme != 0) lovelyInput.setTheme(theme);
+        MaterialPreferences.setUserInputModule(lovelyInput.build());
 
         // General
         generalCategory.setTitle(R.string.general);
@@ -230,6 +233,10 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
         });
         clearLogs.setTitle(R.string.clearLogs);
         logsCategory.addView(clearLogs);
+    }
+
+    public void setup(@NonNull AbsMaterialPreference.OverrideOnClickListener outputPathListener, @Nullable Prefs.KeyWithDefault<Boolean> startAtBootPref, @Nullable Prefs.KeyWithDefault<Boolean> startWithAppPref, boolean rpcEnabled) {
+        setup(0, outputPathListener, startAtBootPref, startWithAppPref, rpcEnabled);
     }
 
     public void lockPreferences(boolean set) {
