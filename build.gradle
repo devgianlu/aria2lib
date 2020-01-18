@@ -65,7 +65,12 @@ task compileAria2 {
         println 'Missing (or forced) aria2c binaries, will build them now.'
         delete(basePath)
 
-        result = exec {
+        exec {
+            executable "chmod"
+            args "+x", "$buildFile.parent/build_aria2c.sh"
+        }
+
+        def result = exec {
             executable "$buildFile.parent/build_aria2c.sh"
         }
 
