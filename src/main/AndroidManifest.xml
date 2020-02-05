@@ -6,7 +6,9 @@
     <!-- Foreground service on Android P+ -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
-    <application android:requestLegacyExternalStorage="true">
+    <application
+        android:extractNativeLibs="true"
+        android:requestLegacyExternalStorage="true">
         <service
             android:name=".internal.Aria2Service"
             android:enabled="true" />
