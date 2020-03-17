@@ -1,16 +1,18 @@
 package com.gianlu.aria2lib.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,7 +22,7 @@ import androidx.core.content.ContextCompat;
 import com.gianlu.aria2lib.Aria2PK;
 import com.gianlu.aria2lib.Aria2Ui;
 import com.gianlu.aria2lib.R;
-import com.gianlu.commonutils.logging.Logging;
+import com.gianlu.commonutils.CommonUtils;
 import com.gianlu.commonutils.misc.MessageView;
 import com.gianlu.commonutils.preferences.Prefs;
 import com.gianlu.commonutils.preferences.json.JsonStoring;
@@ -100,7 +102,6 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
                         int port = Integer.parseInt(text);
                         return port > 0 && port < 65536;
                     } catch (Exception ex) {
-                        Logging.log(ex);
                         return false;
                     }
                 })
@@ -256,13 +257,67 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
         outputPath.setValue(path);
     }
 
-    public void appendLogLine(@NonNull Logging.LogLine line) {
+    public void appendLogEntry(@NonNull LogEntry entry) {
         if (logsContainer != null) {
             logsContainer.setVisibility(View.VISIBLE);
             logsMessage.setVisibility(View.GONE);
-            logsContainer.addView(Logging.LogLineAdapter.createLogLineView(LayoutInflater.from(getContext()), logsContainer, line), logsContainer.getChildCount());
+            logsContainer.addView(entry.createView(getContext()), logsContainer.getChildCount());
             if (logsContainer.getChildCount() > Aria2Ui.MAX_LOG_LINES)
                 logsContainer.removeViewAt(0);
+        }
+    }
+
+    public static class LogEntry {
+        private final Type type;
+        private final String text;
+
+        public LogEntry(@NonNull Type type, @NonNull String text) {
+            this.type = type;
+            this.text = text;
+        }
+
+        @SuppressLint("SetTextI18n")
+        @NonNull
+        View createView(@NonNull Context context) {
+            LinearLayout layout = (LinearLayout) View.inflate(context, R.layout.aria2lib_log_entry, null);
+            TextView level = layout.findViewById(R.id.logEntry_level);
+            TextView msg = layout.findViewById(R.id.logEntry_msg);
+
+            msg.setText(text);
+            msg.setSingleLine(true);
+            msg.setTag(true);
+            msg.setEllipsize(TextUtils.TruncateAt.END);
+
+            switch (type) {
+                case INFO:
+                    level.setText("INFO: ");
+                    CommonUtils.setTextColor(level, R.color.logLevel_info);
+                    break;
+                case WARNING:
+                    level.setText("WARNING: ");
+                    CommonUtils.setTextColor(level, R.color.logLevel_warn);
+                    break;
+                case ERROR:
+                    level.setText("ERROR: ");
+                    CommonUtils.setTextColor(level, R.color.logLevel_error);
+                    break;
+            }
+
+            layout.setOnClickListener(view -> {
+                if ((Boolean) msg.getTag()) {
+                    msg.setSingleLine(false);
+                    msg.setTag(false);
+                } else {
+                    msg.setSingleLine(true);
+                    msg.setTag(true);
+                }
+            });
+
+            return layout;
+        }
+
+        public enum Type {
+            INFO, WARNING, ERROR
         }
     }
 
@@ -285,7 +340,7 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
                 activity.startActivityForResult(intent, requestCode);
                 return true;
             } catch (ActivityNotFoundException ex) {
-                Toaster.with(activity).message(R.string.noOpenTree).ex(ex).show();
+                Toaster.with(activity).message(R.string.noOpenTree).show();
                 return false;
             }
         }

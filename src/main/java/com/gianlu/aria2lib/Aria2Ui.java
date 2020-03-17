@@ -9,6 +9,7 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,7 +19,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.gianlu.aria2lib.internal.Aria2;
 import com.gianlu.aria2lib.internal.Aria2Service;
 import com.gianlu.aria2lib.internal.Message;
-import com.gianlu.commonutils.logging.Logging;
 import com.gianlu.commonutils.preferences.Prefs;
 
 import java.io.File;
@@ -31,6 +31,7 @@ import java.util.Objects;
 
 public class Aria2Ui {
     public static final int MAX_LOG_LINES = 100;
+    private static final String TAG = Aria2Ui.class.getSimpleName();
     private final Aria2 aria2;
     private final Context context;
     private final Listener listener;
@@ -93,7 +94,7 @@ public class Aria2Ui {
             if (messenger != null)
                 messenger.send(android.os.Message.obtain(null, Aria2Service.MESSAGE_STATUS));
         } catch (RemoteException ex) {
-            Logging.log(ex);
+            Log.e(TAG, "Failed sending message (ask for status).", ex);
         }
     }
 
@@ -118,7 +119,7 @@ public class Aria2Ui {
                 listener.updateUi(false);
             }
 
-            Logging.log(ex);
+            Log.e(TAG, "Failed starting service.", ex);
         }
     }
 
@@ -131,7 +132,7 @@ public class Aria2Ui {
                 listener.updateUi(false);
             }
 
-            Logging.log(ex);
+            Log.e(TAG, "Failed starting server (from receiver).", ex);
         }
     }
 
@@ -141,7 +142,7 @@ public class Aria2Ui {
                 messenger.send(android.os.Message.obtain(null, Aria2Service.MESSAGE_STOP));
                 return;
             } catch (RemoteException ex) {
-                Logging.log(ex);
+                Log.e(TAG, "Failed stopping service.", ex);
             }
         }
 
@@ -199,6 +200,8 @@ public class Aria2Ui {
         public void onReceive(Context context, Intent intent) {
             if (Objects.equals(intent.getAction(), Aria2Service.BROADCAST_MESSAGE)) {
                 Message.Type type = (Message.Type) intent.getSerializableExtra("type");
+                if (type == null) return;
+
                 int i = intent.getIntExtra("i", 0);
                 Serializable o = intent.getSerializableExtra("o");
                 publishMessage(new LogMessage(type, i, o));

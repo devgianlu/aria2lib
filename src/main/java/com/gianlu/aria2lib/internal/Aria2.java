@@ -1,13 +1,13 @@
 package com.gianlu.aria2lib.internal;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.gianlu.aria2lib.Aria2PK;
 import com.gianlu.aria2lib.BadEnvironmentException;
-import com.gianlu.commonutils.logging.Logging;
 import com.gianlu.commonutils.preferences.Prefs;
 import com.gianlu.commonutils.preferences.json.JsonStoring;
 
@@ -36,6 +36,7 @@ import java.util.regex.Pattern;
 
 public final class Aria2 {
     private static final Pattern INFO_MESSAGE_PATTERN = Pattern.compile("^\\d{2}/\\d{2} \\d{2}:\\d{2}:\\d{2} \\[.+] (.+)$");
+    private static final String TAG = Aria2.class.getSimpleName();
     private static Aria2 instance;
     private final MessageHandler messageHandler;
     private final Object processLock = new Object();
@@ -200,17 +201,18 @@ public final class Aria2 {
 
     private void monitorFailed(@NonNull Exception ex) {
         postMessage(Message.obtain(Message.Type.MONITOR_FAILED, ex));
-        Logging.log(ex);
     }
 
     private void postMessage(@NonNull Message message) {
         message.delay = 0;
         messageHandler.queue.add(message);
+        message.log(TAG);
     }
 
     private void postMessageDelayed(@NonNull Message message, int millis) {
         message.delay = millis;
         messageHandler.queue.add(message);
+        message.log(TAG);
     }
 
     private void handleStreamMessage(@NonNull String line) {
@@ -268,8 +270,8 @@ public final class Aria2 {
 
                     msg.recycle();
                 } catch (InterruptedException ex) {
+                    Log.w(TAG, ex);
                     close();
-                    Logging.log(ex);
                 }
             }
         }
@@ -325,7 +327,7 @@ public final class Aria2 {
                     options.put("--" + key, obj.getString(key));
                 }
             } catch (JSONException ex) {
-                Logging.log(ex);
+                Log.e(TAG, "Failed loading custom options.", ex);
             }
         }
 
@@ -429,7 +431,7 @@ public final class Aria2 {
                 try {
                     return MonitorUpdate.obtain(Integer.parseInt(matcher.group(pidCpuRss[0])), matcher.group(pidCpuRss[1]), getMemoryBytes(matcher.group(pidCpuRss[2])));
                 } catch (Exception ex) {
-                    Logging.log("Failed parsing `top` line: " + line, ex);
+                    Log.e(TAG, "Failed parsing `top` line: " + line, ex);
                 }
             }
 
@@ -482,7 +484,7 @@ public final class Aria2 {
 
                     byte[] buffer = new byte[INVALID_STRING.length];
                     if (buffer.length != process.getErrorStream().read(buffer) || !Arrays.equals(buffer, INVALID_STRING)) {
-                        Logging.log(String.format(Locale.getDefault(), "Couldn't identify `top` version. {invalidString: %s, exitCode: %d}", new String(buffer), exitCode), true);
+                        Log.e(TAG, String.format(Locale.getDefault(), "Couldn't identify `top` version. {invalidString: %s, exitCode: %d}", new String(buffer), exitCode));
                         return null;
                     } else {
                         return TopParser.OLD_PARSER;
@@ -491,7 +493,7 @@ public final class Aria2 {
                     return TopParser.NEW_PARSER;
                 }
             } else {
-                Logging.log("Couldn't identify `top` version, process didn't exit within 1000ms.", true);
+                Log.e(TAG, "Couldn't identify `top` version, process didn't exit within 1000ms.");
                 return null;
             }
         }
@@ -506,7 +508,7 @@ public final class Aria2 {
                     return;
                 }
             } catch (IOException | InterruptedException ex) {
-                Logging.log("Couldn't find suitable pattern for `top`.", ex);
+                Log.e(TAG, "Couldn't find suitable pattern for `top`.", ex);
                 return;
             }
 
@@ -550,7 +552,7 @@ public final class Aria2 {
                 processTerminated(exit);
             } catch (InterruptedException ex) {
                 processTerminated(999);
-                Logging.log(ex);
+                Log.w(TAG, ex);
             }
         }
     }

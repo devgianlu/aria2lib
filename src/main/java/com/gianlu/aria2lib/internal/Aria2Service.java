@@ -18,6 +18,7 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
@@ -32,7 +33,6 @@ import com.gianlu.aria2lib.BareConfigProvider;
 import com.gianlu.aria2lib.R;
 import com.gianlu.commonutils.CommonUtils;
 import com.gianlu.commonutils.analytics.AnalyticsApplication;
-import com.gianlu.commonutils.logging.Logging;
 import com.gianlu.commonutils.preferences.Prefs;
 
 import java.io.IOException;
@@ -50,6 +50,7 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     private static final String CHANNEL_ID = "aria2service";
     private static final String SERVICE_NAME = "Service for aria2";
     private static final int NOTIFICATION_ID = 69;
+    private static final String TAG = Aria2Service.class.getSimpleName();
     private final HandlerThread serviceThread = new HandlerThread("aria2-service");
     private Messenger messenger;
     private LocalBroadcastManager broadcastManager;
@@ -62,7 +63,6 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
         if (key.equals(Aria2PK.SHOW_PERFORMANCE.key()))
             initializeNotification();
     };
-    private String aria2Version;
 
     public static void startService(@NonNull Context context) {
         new Handler(Looper.getMainLooper()).post(() -> {
@@ -129,10 +129,9 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(reinitializeNotificationListener);
 
         try {
-            aria2Version = aria2.version();
+            Log.d(TAG, aria2.version());
         } catch (BadEnvironmentException | IOException ex) {
-            Logging.log(ex);
-            aria2Version = "aria2 version [unknown]";
+            Log.e(TAG, "Failed getting aria2 version.", ex);
         }
     }
 
@@ -170,13 +169,13 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
                     messenger.send(Message.obtain(null, MESSAGE_START));
                     return flags == 1 ? START_STICKY : START_REDELIVER_INTENT;
                 } catch (RemoteException ex) {
-                    Logging.log("Failed starting executable on service thread!", ex);
+                    Log.e(TAG, "Failed starting executable on service thread!", ex);
 
                     try {
                         start();
                         return flags == 1 ? START_STICKY : START_REDELIVER_INTENT;
                     } catch (IOException | BadEnvironmentException exx) {
-                        Logging.log(exx);
+                        Log.e(TAG, "Still failed to start service.", exx);
                     }
                 }
             } else if (Objects.equals(intent.getAction(), ACTION_STOP_SERVICE)) {
@@ -244,9 +243,6 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
         intent.putExtra("i", msg.integer());
         if (msg.object() instanceof Serializable) intent.putExtra("o", (Serializable) msg.object());
         broadcastManager.sendBroadcast(intent);
-
-        if (msg.type() != com.gianlu.aria2lib.internal.Message.Type.MONITOR_UPDATE)
-            Logging.log(msg.toLogLine(aria2Version));
     }
 
     private void dispatchStatus() {
@@ -279,7 +275,7 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
                     try {
                         service.start();
                     } catch (IOException | BadEnvironmentException ex) {
-                        Logging.log("Failed starting service!", ex);
+                        Log.e(TAG, "Failed starting service.", ex);
                         service.stop();
                         service.stopSelf();
                     }

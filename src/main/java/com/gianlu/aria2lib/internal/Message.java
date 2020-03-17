@@ -1,9 +1,9 @@
 package com.gianlu.aria2lib.internal;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import com.gianlu.commonutils.logging.Logging;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -81,29 +81,29 @@ public final class Message {
         return "Message{o=" + o + ", i=" + i + ", type=" + type + '}';
     }
 
-    @NonNull
-    public Logging.LogLine toLogLine(@NonNull String aria2Version) {
-        return new Logging.LogLine(System.currentTimeMillis(), aria2Version, type.getType(), toString());
+    public void log(@NonNull String tag) {
+        int p = type.getPriority();
+        if (p != -1) Log.println(p, tag, toString());
     }
 
     public enum Type {
         PROCESS_TERMINATED, PROCESS_STARTED, MONITOR_FAILED, MONITOR_UPDATE,
         PROCESS_WARN, PROCESS_ERROR, PROCESS_INFO;
 
-        @NonNull
-        private Logging.LogLine.Type getType() {
+        private int getPriority() {
             switch (this) {
                 case MONITOR_UPDATE:
+                    return -1;
                 case PROCESS_INFO:
                 case PROCESS_STARTED:
                 case PROCESS_TERMINATED:
-                    return Logging.LogLine.Type.INFO;
+                    return Log.INFO;
                 case PROCESS_WARN:
-                    return Logging.LogLine.Type.WARNING;
+                    return Log.WARN;
                 default:
                 case PROCESS_ERROR:
                 case MONITOR_FAILED:
-                    return Logging.LogLine.Type.ERROR;
+                    return Log.ERROR;
             }
         }
     }
