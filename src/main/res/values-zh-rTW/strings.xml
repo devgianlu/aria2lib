@@ -39,8 +39,6 @@
     <string name="noCustomOptions">您沒有自訂設定。</string>
     <string name="done">完成</string>
     <string name="failedSavingCustomOptions">儲存自訂設定失敗!</string>
-    <string name="updatedApp_importedConfig">導入的設定檔案</string>
-    <string name="updatedApp_importedConfig_message">此版本的 App 引入了一項新功能:自訂設定編輯器。您的設定檔案已在此處導入。</string>
     <string name="failedLoadingOptions">載入自訂設定失敗!</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>

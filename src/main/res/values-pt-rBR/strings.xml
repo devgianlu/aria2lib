@@ -39,8 +39,6 @@
     <string name="noCustomOptions">Você não tem opções personalizadas.</string>
     <string name="done">Feito</string>
     <string name="failedSavingCustomOptions">Falha ao salvar opções personalizadas!</string>
-    <string name="updatedApp_importedConfig">Arquivo de configuração importado</string>
-    <string name="updatedApp_importedConfig_message">Esta versão do aplicativo introduziu um novo recurso: o editor de opções personalizadas. Seu arquivo de configuração foi importado aqui.</string>
     <string name="failedLoadingOptions">Falha ao carregar opções personalizadas!</string>
     <string name="delete">Excluir</string>
     <string name="edit">Editar</string>

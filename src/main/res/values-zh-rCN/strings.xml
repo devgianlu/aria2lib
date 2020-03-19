@@ -39,8 +39,6 @@
     <string name="noCustomOptions">您没有自定义选项。</string>
     <string name="done">完成</string>
     <string name="failedSavingCustomOptions">保存自定义选项失败!</string>
-    <string name="updatedApp_importedConfig">导入的配置文件</string>
-    <string name="updatedApp_importedConfig_message">此版本的应用程序引入了一项新功能：自定义选项编辑器。您的配置文件已导入到此处。</string>
     <string name="failedLoadingOptions">加载自定义选项失败!</string>
     <string name="delete">删除</string>
     <string name="edit">编辑</string>

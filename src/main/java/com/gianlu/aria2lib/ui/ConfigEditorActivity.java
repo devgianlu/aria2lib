@@ -28,29 +28,16 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.List;
 
 public class ConfigEditorActivity extends ActivityWithDialog implements SimpleOptionsAdapter.Listener {
     private static final int IMPORT_CODE = 1;
+    private static final String TAG = ConfigEditorActivity.class.getSimpleName();
     private SimpleOptionsAdapter adapter;
     private RecyclerMessageView rmv;
-
-    @NonNull
-    private static JSONObject toJson(List<Pair<String, String>> list) throws JSONException {
-        JSONObject obj = new JSONObject();
-        for (Pair<String, String> pair : list) obj.put(pair.first, pair.second);
-        return obj;
-    }
-
-    private static final String TAG = ConfigEditorActivity.class.getSimpleName();
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -84,53 +71,17 @@ public class ConfigEditorActivity extends ActivityWithDialog implements SimpleOp
             Log.e(TAG, "Failed loading JSON.", ex);
             Toaster.with(this).message(R.string.failedLoadingOptions).show();
             onBackPressed();
-            return;
-        }
-
-        String importOptions = getIntent().getStringExtra("import");
-        if (importOptions != null) {
-            try {
-                importOptionsFromStream(new FileInputStream(importOptions));
-            } catch (FileNotFoundException ex) {
-                Toaster.with(this).message(R.string.fileNotFound).extra(importOptions).show();
-            }
-
-            save();
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.updatedApp_importedConfig)
-                    .setMessage(R.string.updatedApp_importedConfig_message)
-                    .setNeutralButton(android.R.string.ok, null);
-
-            showDialog(builder);
         }
     }
 
     private void save() {
         try {
-            JsonStoring.intoPrefs().putJsonObject(Aria2PK.CUSTOM_OPTIONS, toJson(adapter.get()));
+            JsonStoring.intoPrefs().putJsonObject(Aria2PK.CUSTOM_OPTIONS, ImportExportUtils.toJson(adapter.get()));
             adapter.saved();
         } catch (JSONException ex) {
             Log.e(TAG, "Failed saving JSON.", ex);
             Toaster.with(this).message(R.string.failedSavingCustomOptions).show();
         }
-    }
-
-    private void importOptionsFromStream(@NonNull InputStream in) {
-        StringBuilder builder = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
-            if (builder.length() > 1024 * 1024 * 10)
-                throw new IOException("File is too big!");
-
-            String line;
-            while ((line = reader.readLine()) != null) builder.append(line).append('\n');
-        } catch (IOException | OutOfMemoryError ex) {
-            System.gc();
-            Toaster.with(this).message(R.string.cannotImport).show();
-            return;
-        }
-
-        adapter.parseAndAdd(builder.toString());
     }
 
     @SuppressLint("InflateParams")
@@ -156,10 +107,13 @@ public class ConfigEditorActivity extends ActivityWithDialog implements SimpleOp
             if (resultCode == Activity.RESULT_OK && data.getData() != null) {
                 try {
                     InputStream in = getContentResolver().openInputStream(data.getData());
-                    if (in != null)
-                        importOptionsFromStream(in);
-                    else
+                    if (in == null || adapter == null) return;
+
+                    try {
+                        adapter.add(ImportExportUtils.readConfigFromStream(in));
+                    } catch (IOException | OutOfMemoryError ex) {
                         Toaster.with(this).message(R.string.cannotImport).show();
+                    }
                 } catch (FileNotFoundException ex) {
                     Toaster.with(this).message(R.string.fileNotFound).show();
                 }
@@ -195,13 +149,10 @@ public class ConfigEditorActivity extends ActivityWithDialog implements SimpleOp
             return true;
         } else if (id == R.id.configEditor_import) {
             try {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("*/*");
-                startActivityForResult(Intent.createChooser(intent, "Import from another configuration file..."), IMPORT_CODE);
+                startActivityForResult(Intent.createChooser(ImportExportUtils.createConfigImportIntent(), getString(R.string.importConfig)), IMPORT_CODE);
             } catch (ActivityNotFoundException ex) {
-                Toaster.with(this).message(R.string.cannotImport).show();
+                Toaster.with(this).message(R.string.missingFileExplorer).show();
             }
-
             return true;
         } else if (id == R.id.configEditor_done) {
             save();

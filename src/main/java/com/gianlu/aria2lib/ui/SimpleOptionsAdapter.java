@@ -41,21 +41,6 @@ public class SimpleOptionsAdapter extends RecyclerView.Adapter<SimpleOptionsAdap
     }
 
     @NonNull
-    private static List<Pair<String, String>> parseOptions(@NonNull String str) {
-        List<Pair<String, String>> list = new ArrayList<>();
-        String[] lines = str.split("\n");
-        for (String line : lines) {
-            line = line.trim();
-            if (line.startsWith("#")) continue;
-            String[] split = line.split("=");
-            if (split.length > 0)
-                list.add(new Pair<>(split[0], split.length == 1 ? null : split[1]));
-        }
-
-        return list;
-    }
-
-    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolder(parent);
@@ -140,8 +125,7 @@ public class SimpleOptionsAdapter extends RecyclerView.Adapter<SimpleOptionsAdap
         if (listener != null) listener.onItemsCountChanged(options.size());
     }
 
-    public void parseAndAdd(@NonNull String str) {
-        List<Pair<String, String>> newOptions = parseOptions(str);
+    public void add(@NonNull List<Pair<String, String>> newOptions) {
         options.addAll(newOptions);
         notifyItemRangeInserted(options.size() - newOptions.size(), newOptions.size());
         changed();
