@@ -52,7 +52,7 @@
     <string name="failedExportingSession">导出会话失败！</string>
     <string name="noSession">没有会话文件。</string>
     <string name="exportedSession">会话已成功导出到 %s!</string>
-    <string name="importedConfig">Configuration imported successfully!</string>
+    <string name="importedConfig">配置导入成功！</string>
     <plurals name="customOptions_summary">
         <item quantity="other">您有%d个自定义选项。</item>
     </plurals>
