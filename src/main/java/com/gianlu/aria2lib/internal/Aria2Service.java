@@ -117,6 +117,8 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     public void onCreate() {
         super.onCreate();
 
+        Prefs.init(this);
+
         aria2 = Aria2.get();
         aria2.addListener(this);
         serviceThread.start();

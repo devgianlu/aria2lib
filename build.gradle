@@ -39,8 +39,8 @@ dependencies {
 
     api 'com.github.devgianlu.MaterialPreferences:lovelyinput:a708da533d'
 
-    api 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
-    api 'com.google.android.material:material:1.2.0-alpha04'
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0-alpha01'
+    implementation 'com.google.android.material:material:1.2.0-alpha05'
 }
 
 task compileAria2 {
