@@ -53,6 +53,7 @@
     <string name="noSession">没有会话文件。</string>
     <string name="exportedSession">会话已成功导出到 %s!</string>
     <string name="importedConfig">配置导入成功！</string>
+    <string name="networkInterfaces">Network interfaces</string>
     <plurals name="customOptions_summary">
         <item quantity="other">您有%d个自定义选项。</item>
     </plurals>
