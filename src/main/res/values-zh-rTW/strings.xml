@@ -53,6 +53,7 @@
     <string name="noSession">There is no session file.</string>
     <string name="exportedSession">Session exported successfully in %s!</string>
     <string name="importedConfig">Configuration imported successfully!</string>
+    <string name="networkInterfaces">Network interfaces</string>
     <plurals name="customOptions_summary">
         <item quantity="other">You have %d custom options.</item>
     </plurals>
