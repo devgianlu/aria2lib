@@ -19,13 +19,18 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.gianlu.aria2lib.internal.Aria2;
 import com.gianlu.aria2lib.internal.Aria2Service;
 import com.gianlu.aria2lib.internal.Message;
+import com.gianlu.commonutils.misc.SuperTextView;
 import com.gianlu.commonutils.preferences.Prefs;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
 
@@ -67,6 +72,38 @@ public class Aria2Ui {
 
     public static void provider(@NonNull Class<? extends BareConfigProvider> providerClass) {
         Prefs.putString(Aria2PK.BARE_CONFIG_PROVIDER, providerClass.getCanonicalName());
+    }
+
+    @NonNull
+    public static String getInterfacesIPsFormatted() {
+        try {
+            StringBuilder builder = new StringBuilder();
+            Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces();
+            boolean f = true;
+            while (e.hasMoreElements()) {
+                NetworkInterface nif = e.nextElement();
+                Enumeration<InetAddress> ee = nif.getInetAddresses();
+                if (!ee.hasMoreElements()) continue;
+
+                if (!f) builder.append("<br><br>");
+                builder.append(SuperTextView.makeBold(nif.getDisplayName())).append("<br>");
+                f = false;
+
+                boolean ff = true;
+                while (ee.hasMoreElements()) {
+                    if (!ff) builder.append("<br>");
+                    ff = false;
+
+                    InetAddress addr = ee.nextElement();
+                    builder.append(addr.getHostAddress());
+                }
+            }
+
+            return builder.toString();
+        } catch (SocketException ex) {
+            Log.e(TAG, "Failed getting interfaces IPs.", ex);
+            return "<error>";
+        }
     }
 
     public void bind() {

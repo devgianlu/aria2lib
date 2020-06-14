@@ -24,6 +24,7 @@ import com.gianlu.aria2lib.Aria2Ui;
 import com.gianlu.aria2lib.R;
 import com.gianlu.commonutils.CommonUtils;
 import com.gianlu.commonutils.misc.MessageView;
+import com.gianlu.commonutils.misc.SuperTextView;
 import com.gianlu.commonutils.preferences.Prefs;
 import com.gianlu.commonutils.preferences.json.JsonStoring;
 import com.gianlu.commonutils.ui.Toaster;
@@ -48,6 +49,7 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
     private final MaterialPreferenceCategory rpcCategory;
     private final MaterialPreferenceCategory notificationsCategory;
     private final MaterialPreferenceCategory logsCategory;
+    private final SuperTextView nicsText;
     private MaterialEditTextPreference outputPath;
     private LinearLayout logsContainer;
     private MessageView logsMessage;
@@ -72,6 +74,11 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
         rpcCategory = findViewById(R.id.aria2lib_confScreen_rpc);
         notificationsCategory = findViewById(R.id.aria2lib_confScreen_notifications);
         logsCategory = findViewById(R.id.aria2lib_confScreen_logs);
+        nicsText = findViewById(R.id.aria2lib_confScreen_nics);
+    }
+
+    public void refreshNics() {
+        nicsText.setHtml(Aria2Ui.getInterfacesIPsFormatted());
     }
 
     public void refreshCustomOptionsNumber() {
@@ -235,6 +242,8 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
         });
         clearLogs.setTitle(R.string.clearLogs);
         logsCategory.addView(clearLogs);
+
+        refreshNics();
     }
 
     public void setup(@NonNull AbsMaterialPreference.OverrideOnClickListener outputPathListener, @Nullable Prefs.KeyWithDefault<Boolean> startAtBootPref, @Nullable Prefs.KeyWithDefault<Boolean> startWithAppPref, boolean rpcEnabled) {
