@@ -55,6 +55,8 @@
     <string name="exportedSession">Session exported successfully in %s!</string>
     <string name="importedConfig">Configuration imported successfully!</string>
     <string name="networkInterfaces">Network interfaces</string>
+    <string name="checkCertificate">Check certificate</string>
+    <string name="checkCertificate_summary">Whether to use the certificate authorities to verify the peers.</string>
     <plurals name="customOptions_summary">
         <item quantity="zero">You have no custom options.</item>
         <item quantity="one">You have one custom option.</item>

@@ -1,6 +1,7 @@
 package com.gianlu.aria2lib.internal;
 
 import android.annotation.SuppressLint;
+import android.util.Base64;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -17,11 +18,18 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -82,6 +90,50 @@ public final class Aria2 {
         return false;
     }
 
+    @Nullable
+    private static String getprop(@NonNull String key) {
+        Process p = null;
+        try {
+            p = Runtime.getRuntime().exec("getprop " + key);
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+                String l = in.readLine();
+                if (l.isEmpty()) return null;
+                else return l;
+            }
+        } catch (IOException ex) {
+            return null;
+        } finally {
+            if (p != null) p.destroy();
+        }
+    }
+
+    @Nullable
+    private File storeAllCertificates(@NonNull File parent) {
+        File certs = new File(parent, "ca-certs");
+        try (FileOutputStream out = new FileOutputStream(certs, false)) {
+            KeyStore ks = KeyStore.getInstance("AndroidCAStore");
+            if (ks != null) {
+                ks.load(null, null);
+                Enumeration<String> aliases = ks.aliases();
+
+                while (aliases.hasMoreElements()) {
+                    String alias = aliases.nextElement();
+
+                    Certificate cert = ks.getCertificate(alias);
+                    out.write("-----BEGIN CERTIFICATE-----\n".getBytes());
+                    out.write(Base64.encode(cert.getEncoded(), 0));
+                    out.write("-----END CERTIFICATE-----\n".getBytes());
+                }
+            }
+
+            return certs;
+        } catch (IOException | KeyStoreException | CertificateException | NoSuchAlgorithmException ex) {
+            Log.e(TAG, "Failed getting CA certificates.", ex);
+        }
+
+        return null;
+    }
+
     void addListener(@NonNull MessageListener listener) {
         messageHandler.listeners.add(listener);
     }
@@ -121,7 +173,7 @@ public final class Aria2 {
         return process;
     }
 
-    public void loadEnv(@NonNull File exec, @NonNull File session) throws BadEnvironmentException {
+    public void loadEnv(@NonNull File parent, @NonNull File exec, @NonNull File session) throws BadEnvironmentException {
         if (!exec.exists())
             throw new BadEnvironmentException(exec.getAbsolutePath() + " doesn't exists!");
 
@@ -140,7 +192,7 @@ public final class Aria2 {
             }
         }
 
-        this.env = new Env(exec, session);
+        this.env = new Env(parent, exec, session, storeAllCertificates(parent));
     }
 
     boolean start() throws BadEnvironmentException, IOException {
@@ -175,7 +227,7 @@ public final class Aria2 {
         if (env == null)
             throw new BadEnvironmentException("Missing environment!");
 
-        loadEnv(env.exec, env.session);
+        loadEnv(env.parent, env.exec, env.session);
     }
 
     private void processTerminated(int code) {
@@ -283,19 +335,38 @@ public final class Aria2 {
     }
 
     private static class Env {
+        private final File parent;
         private final File exec;
         private final File session;
         private final Map<String, String> params;
 
-        Env(@NonNull File exec, @NonNull File session) {
+        Env(@NonNull File parent, @NonNull File exec, @NonNull File session, @Nullable File cacerts) {
+            this.parent = parent;
             this.exec = exec;
             this.session = session;
             this.params = new HashMap<>();
 
             // Can be overridden
-            params.put("--check-certificate", "false");
             if (Prefs.getBoolean(Aria2PK.SAVE_SESSION))
                 params.put("--save-session-interval", "30");
+
+            String dns1 = getprop("net.dns1");
+            String dns2 = getprop("net.dns2");
+            if (dns1 != null || dns2 != null) {
+                String dnsString = dns1 != null ? dns1 : dns2;
+                if (dns1 != null) dnsString += "," + dns1;
+                else dnsString += "," + dns2;
+
+                params.put("--async-dns", "true");
+                params.put("--async-dns-server", dnsString);
+            }
+
+            if (Prefs.getBoolean(Aria2PK.CHECK_CERTIFICATE) && cacerts != null) {
+                params.put("--check-certificate", "true");
+                params.put("--ca-certificate", cacerts.getAbsolutePath());
+            } else {
+                params.put("--check-certificate", "false");
+            }
 
             loadCustomOptions(params);
 

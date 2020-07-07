@@ -140,6 +140,14 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
         saveSession.setSummary(R.string.saveSession_summary);
         generalCategory.addView(saveSession);
 
+        MaterialCheckboxPreference checkCertificate = new MaterialCheckboxPreference.Builder(getContext())
+                .key(Aria2PK.CHECK_CERTIFICATE.key())
+                .defaultValue(Aria2PK.CHECK_CERTIFICATE.fallback())
+                .build();
+        checkCertificate.setTitle(R.string.checkCertificate);
+        checkCertificate.setSummary(R.string.checkCertificate_summary);
+        generalCategory.addView(checkCertificate);
+
         if (startAtBootPref != null) {
             MaterialCheckboxPreference startAtBoot = new MaterialCheckboxPreference.Builder(getContext())
                     .key(startAtBootPref.key())

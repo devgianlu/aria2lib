@@ -136,8 +136,8 @@ public class Aria2Ui {
     }
 
     public void loadEnv(@NonNull Context context) throws BadEnvironmentException {
-        aria2.loadEnv(new File(context.getApplicationInfo().nativeLibraryDir, "libaria2c.so"),
-                new File(context.getFilesDir(), "session"));
+        File parent = context.getFilesDir();
+        aria2.loadEnv(parent, new File(context.getApplicationInfo().nativeLibraryDir, "libaria2c.so"), new File(parent, "session"));
     }
 
     @NonNull
