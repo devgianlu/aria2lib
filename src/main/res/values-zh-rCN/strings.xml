@@ -54,7 +54,7 @@
     <string name="exportedSession">会话已成功导出到 %s!</string>
     <string name="importedConfig">配置导入成功！</string>
     <string name="networkInterfaces">网络接口</string>
-    <string name="checkCertificate">Check certificate</string>
+    <string name="checkCertificate">检查证书</string>
     <string name="checkCertificate_summary">Whether to use the certificate authorities to verify the peers.</string>
     <plurals name="customOptions_summary">
         <item quantity="other">您有%d个自定义选项。</item>
