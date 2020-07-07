@@ -55,7 +55,7 @@
     <string name="importedConfig">配置导入成功！</string>
     <string name="networkInterfaces">网络接口</string>
     <string name="checkCertificate">检查证书</string>
-    <string name="checkCertificate_summary">Whether to use the certificate authorities to verify the peers.</string>
+    <string name="checkCertificate_summary">是否使用证书颁发机构来验证可连接用户。</string>
     <plurals name="customOptions_summary">
         <item quantity="other">您有%d个自定义选项。</item>
     </plurals>
