@@ -154,7 +154,11 @@ public final class Aria2 {
         try {
             Process process = execWithParams(false, "-v");
             process.waitFor();
-            return new BufferedReader(new InputStreamReader(process.getInputStream())).readLine();
+
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                String str = reader.readLine();
+                return str == null ? "" : str;
+            }
         } catch (InterruptedException ex) {
             throw new IOException(ex);
         }
