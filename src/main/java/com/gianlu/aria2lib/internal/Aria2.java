@@ -372,11 +372,13 @@ public final class Aria2 {
                 params.put("--check-certificate", "false");
             }
 
+            params.put("--rpc-listen-all", "false");
+
             loadCustomOptions(params);
 
+            // Cannot be overridden
             params.put("--daemon", "false");
             params.put("--enable-color", "false");
-            params.put("--rpc-listen-all", "true");
             params.put("--enable-rpc", "true");
             params.put("--rpc-secret", Prefs.getString(Aria2PK.RPC_TOKEN));
             params.put("--rpc-listen-port", String.valueOf(Prefs.getInt(Aria2PK.RPC_PORT, 6800)));
