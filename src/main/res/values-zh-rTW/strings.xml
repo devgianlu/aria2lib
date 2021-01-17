@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="yes">是</string>
-    <string name="stopService">Stop service</string>
     <string name="no">否</string>
-    <string name="rpcPort">RPC port</string>
-    <string name="rpcToken">RPC token</string>
     <string name="outputPath">輸出路徑</string>
     <string name="general">一般</string>
     <string name="clearLogs">清除紀錄檔</string>
@@ -23,38 +20,16 @@
     <string name="invalidPort">Port 錯誤!</string>
     <string name="invalidToken">Token 錯誤!</string>
     <string name="invalidOutputPath">輸出路徑不存在或無法寫入!</string>
-    <string name="logTerminated">Terminated with exit code %d.</string>
-    <string name="logStarted">Started: %s</string>
     <string name="newValue">新的值</string>
     <string name="apply">應用</string>
     <string name="key">鍵</string>
     <string name="value">值</string>
     <string name="newOption">新設定</string>
     <string name="unsavedChanges">有未儲存的更動</string>
-    <string name="unsavedChanges_message">Some changes you made to the configuration file may have not been saved. Do you want to save them before exiting?</string>
-    <string name="importConfig">Import configuration</string>
     <string name="fileNotFound">找不到所選檔案!</string>
     <string name="cannotImport">無法導入所選檔案!</string>
     <string name="noCustomOptions">您沒有自訂設定。</string>
     <string name="done">完成</string>
     <string name="failedSavingCustomOptions">儲存自訂設定失敗!</string>
     <string name="failedLoadingOptions">載入自訂設定失敗!</string>
-    <string name="delete">Delete</string>
-    <string name="edit">Edit</string>
-    <string name="startServiceWithApp">Start service when the app opens</string>
-    <string name="startServiceWithApp_summary">The service will start when the app is opened.</string>
-    <string name="importExport">Import/export</string>
-    <string name="exportConfig">Export configuration</string>
-    <string name="exportSessionFile">Export session</string>
-    <string name="missingFileExplorer">You don\'t have any file browser!</string>
-    <string name="failedExportingConf">Failed exporting configuration!</string>
-    <string name="exportedConfig">Configuration exported successfully in %s!</string>
-    <string name="failedExportingSession">Failed exporting session!</string>
-    <string name="noSession">There is no session file.</string>
-    <string name="exportedSession">Session exported successfully in %s!</string>
-    <string name="importedConfig">Configuration imported successfully!</string>
-    <string name="networkInterfaces">Network interfaces</string>
-    <plurals name="customOptions_summary">
-        <item quantity="other">You have %d custom options.</item>
-    </plurals>
 </resources>
