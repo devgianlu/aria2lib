@@ -439,7 +439,7 @@ public final class Aria2 {
         static final TopParser OLD_PARSER = new TopParser(TOP_OLD_PATTERN, 1, 3, 7) {
             @Override
             boolean matches(@NonNull String line) {
-                return line.endsWith("aria2c");
+                return line.endsWith("aria2c.so");
             }
 
             @NonNull
@@ -558,7 +558,6 @@ public final class Aria2 {
             if (waitFor(process, 1000, TimeUnit.MILLISECONDS)) {
                 int exitCode = process.exitValue();
                 if (exitCode != 0) {
-
                     byte[] buffer = new byte[INVALID_STRING.length];
                     if (buffer.length != process.getErrorStream().read(buffer) || !Arrays.equals(buffer, INVALID_STRING)) {
                         Log.e(TAG, String.format(Locale.getDefault(), "Couldn't identify `top` version. {invalidString: %s, exitCode: %d}", new String(buffer), exitCode));
