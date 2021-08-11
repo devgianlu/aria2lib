@@ -57,6 +57,8 @@
     <string name="networkInterfaces">Network interfaces</string>
     <string name="checkCertificate">Check certificate</string>
     <string name="checkCertificate_summary">Whether to use the certificate authorities to verify the peers.</string>
+    <string name="listenAllInterfaces">Listen on all interfaces</string>
+    <string name="listenAllInterfaces_summary">Listening on all interfaces will exposes aria2 to the external network you are connected to.</string>
     <plurals name="customOptions_summary">
         <item quantity="zero">You have no custom options.</item>
         <item quantity="one">You have one custom option.</item>

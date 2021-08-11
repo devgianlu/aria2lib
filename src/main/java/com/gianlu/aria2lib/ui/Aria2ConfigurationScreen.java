@@ -195,6 +195,14 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
             rpcToken.setTitle(R.string.rpcToken);
             rpcCategory.addView(rpcToken);
 
+            MaterialCheckboxPreference listenAll = new MaterialCheckboxPreference.Builder(getContext())
+                    .key(Aria2PK.RPC_LISTEN_ALL.key())
+                    .defaultValue(Aria2PK.RPC_LISTEN_ALL.fallback())
+                    .build();
+            listenAll.setTitle(R.string.listenAllInterfaces);
+            listenAll.setSummary(R.string.listenAllInterfaces_summary);
+            rpcCategory.addView(listenAll);
+
             MaterialCheckboxPreference allowOriginAll = new MaterialCheckboxPreference.Builder(getContext())
                     .key(Aria2PK.RPC_ALLOW_ORIGIN_ALL.key())
                     .defaultValue(Aria2PK.RPC_ALLOW_ORIGIN_ALL.fallback())

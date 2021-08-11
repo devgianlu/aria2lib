@@ -11,6 +11,7 @@ public abstract class Aria2PK extends CommonPK {
     public static final Prefs.KeyWithDefault<Integer> RPC_PORT = new Prefs.KeyWithDefault<>("rpcPort", 6800);
     public static final Prefs.KeyWithDefault<String> RPC_TOKEN = new Prefs.KeyWithDefault<>("rpcToken", "aria2");
     public static final Prefs.KeyWithDefault<Boolean> RPC_ALLOW_ORIGIN_ALL = new Prefs.KeyWithDefault<>("allowOriginAll", false);
+    public static final Prefs.KeyWithDefault<Boolean> RPC_LISTEN_ALL = new Prefs.KeyWithDefault<>("listenAll", false);
     public static final Prefs.KeyWithDefault<Boolean> CHECK_CERTIFICATE = new Prefs.KeyWithDefault<>("checkCertificate", false);
     public static final Prefs.KeyWithDefault<String> OUTPUT_DIRECTORY = new Prefs.KeyWithDefault<>("outputPath", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath());
     public static final Prefs.Key CUSTOM_OPTIONS = new Prefs.Key("customOptions");
