@@ -94,7 +94,7 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
     @NonNull
     private PendingIntent getStopServiceIntent() {
         return PendingIntent.getService(this, 1, new Intent(this, Aria2Service.class)
-                .setAction(ACTION_STOP_SERVICE), PendingIntent.FLAG_UPDATE_CURRENT);
+                .setAction(ACTION_STOP_SERVICE), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     }
 
     private void initializeNotification() {
@@ -106,7 +106,7 @@ public final class Aria2Service extends Service implements Aria2.MessageListener
                 .setOngoing(true)
                 .setSmallIcon(provider.notificationIcon())
                 .setContentIntent(PendingIntent.getActivity(this, 2, new Intent(this, provider.actionClass())
-                        .putExtra("openFromNotification", true), PendingIntent.FLAG_UPDATE_CURRENT))
+                        .putExtra("openFromNotification", true), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE))
                 .setContentText("aria2c is running...");
 
         if (!Prefs.getBoolean(Aria2PK.SHOW_PERFORMANCE))
