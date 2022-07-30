@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="yes">是</string>
+    <string name="stopService">停止服務</string>
     <string name="no">否</string>
+    <string name="rpcPort">RPC 連接埠</string>
+    <string name="rpcToken">RPC 權杖</string>
     <string name="outputPath">輸出路徑</string>
     <string name="general">一般</string>
     <string name="clearLogs">清除紀錄檔</string>
