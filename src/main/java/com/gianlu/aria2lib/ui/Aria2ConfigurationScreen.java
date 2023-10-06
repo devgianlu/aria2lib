@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -129,7 +130,10 @@ public class Aria2ConfigurationScreen extends MaterialPreferenceScreen {
                 .defaultValue(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath())
                 .build();
         outputPath.setTitle(R.string.outputPath);
-        outputPath.setOverrideClickListener(outputPathListener);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            outputPath.setOverrideClickListener(outputPathListener);
+        }
+
         generalCategory.addView(outputPath);
 
         MaterialCheckboxPreference saveSession = new MaterialCheckboxPreference.Builder(getContext())
