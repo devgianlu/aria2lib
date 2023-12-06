@@ -11,7 +11,7 @@ This is a small module (Android library only) that allows to download and manage
 - Add the Gradle module to your `settings.gradle`:
 ```
 include ':aria2lib', ':CommonUtils' ...
-project(':CommonUtils').projectDir = new File('./CommonUtils/utils')
+project(':CommonUtils').projectDir = new File('./CommonUtils')
 project(':aria2lib').projectDir = new File('./aria2lib')
 ```
 - Add it as a dependency:
