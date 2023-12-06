@@ -31,6 +31,8 @@ android {
         warning 'MissingTranslation'
     }
 
+    namespace 'com.gianlu.aria2lib'
+
     buildTypes {
         release {
             minifyEnabled true
