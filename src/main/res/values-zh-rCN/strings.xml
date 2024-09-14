@@ -56,6 +56,8 @@
     <string name="networkInterfaces">网络接口</string>
     <string name="checkCertificate">检查证书</string>
     <string name="checkCertificate_summary">是否使用证书颁发机构来验证可连接用户。</string>
+    <string name="listenAllInterfaces">监听所有网络适配器</string>
+    <string name="listenAllInterfaces_summary">监听所有网络适配器将使aria2暴露于您连接的外部网络。</string>
     <plurals name="customOptions_summary">
         <item quantity="other">您有%d个自定义选项。</item>
     </plurals>
