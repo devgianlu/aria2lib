@@ -4,11 +4,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
@@ -19,9 +21,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gianlu.aria2lib.Aria2PK;
 import com.gianlu.aria2lib.R;
+import com.gianlu.aria2lib.databinding.Aria2libConfigEditorActivityBinding;
 import com.gianlu.commonutils.CommonUtils;
 import com.gianlu.commonutils.dialogs.ActivityWithDialog;
 import com.gianlu.commonutils.misc.RecyclerMessageView;
+import com.gianlu.commonutils.preferences.CommonPK;
+import com.gianlu.commonutils.preferences.Prefs;
 import com.gianlu.commonutils.preferences.json.JsonStoring;
 import com.gianlu.commonutils.ui.Toaster;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -39,12 +44,6 @@ public class ConfigEditorActivity extends ActivityWithDialog implements SimpleOp
     private SimpleOptionsAdapter adapter;
     private RecyclerMessageView rmv;
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.aria2lib_config_editor, menu);
-        return true;
-    }
-
     private void load() throws JSONException {
         adapter.load(JsonStoring.intoPrefs().getJsonObject(Aria2PK.CUSTOM_OPTIONS));
     }
@@ -52,14 +51,17 @@ public class ConfigEditorActivity extends ActivityWithDialog implements SimpleOp
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Aria2libConfigEditorActivityBinding binding = Aria2libConfigEditorActivityBinding.inflate(getLayoutInflater());
+        rmv = binding.content;
+        setContentView(binding.getRoot());
+        binding.toolbar.setTitle(R.string.customOptions);
+        binding.toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material);
+        binding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
 
-        rmv = new RecyclerMessageView(this);
-        setContentView(rmv);
-        setTitle(R.string.customOptions);
-
-        ActionBar bar = getSupportActionBar();
-        if (bar != null) bar.setDisplayHomeAsUpEnabled(true);
-
+        getMenuInflater().inflate(R.menu.aria2lib_config_editor, binding.toolbar.getMenu());
+        binding.toolbar.setOnMenuItemClickListener(this::onOptionsItemSelected);
+        setNight();
+        
         rmv.linearLayoutManager(RecyclerView.VERTICAL, false);
         rmv.dividerDecoration(RecyclerView.VERTICAL);
         adapter = new SimpleOptionsAdapter(this, this);
@@ -71,6 +73,20 @@ public class ConfigEditorActivity extends ActivityWithDialog implements SimpleOp
             Log.e(TAG, "Failed loading JSON.", ex);
             Toaster.with(this).message(R.string.failedLoadingOptions).show();
             onBackPressed();
+        }
+    }
+
+    final private void setNight() {
+        boolean b = Prefs.getBoolean(CommonPK.NIGHT_MODE, false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            View decor = getWindow().getDecorView();
+            int flags = decor.getSystemUiVisibility();
+            if (!b) {
+                flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            } else {
+                flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            }
+            decor.setSystemUiVisibility(flags);
         }
     }
 

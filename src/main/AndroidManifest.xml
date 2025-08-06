@@ -18,6 +18,7 @@
 
         <activity
             android:name="com.gianlu.aria2lib.ui.ConfigEditorActivity"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
             android:configChanges="uiMode" />
     </application>
 </manifest>
